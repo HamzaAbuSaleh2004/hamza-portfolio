@@ -18,13 +18,16 @@ class TextMiningEngine:
         # Configure Gemini
         load_dotenv()
         api_key = os.getenv('GOOGLE_API_KEY')
+        
         if not api_key:
-            # Fallback for dev if env not set, though ideally from env
-            api_key = "AIzaSyDLP4qzraYMGKA7ey4oAKFJy_CWTyzsHwg"
+            print("[WARNING] No GOOGLE_API_KEY found in environment. Gemini features will be disabled.")
+            self.gemini_model = None
+            return
             
         try:
             genai.configure(api_key=api_key)
             self.gemini_model = genai.GenerativeModel('gemini-2.0-flash')
+            print("[INFO] Gemini API successfully configured")
         except Exception as e:
             print(f"[WARNING] Could not initialize Gemini in TextMining: {e}")
             self.gemini_model = None
