@@ -1,15 +1,21 @@
+# Flask Web Framework
 Flask==3.0.0
+
+# Core ML/Data Processing (REQUIRED for CV screening)
 numpy
-pandas
 scikit-learn
-joblib
 PyPDF2
+
+# Graph Mining (REQUIRED for CV screening)
 networkx
 matplotlib
+
+# RAG Chatbot (REQUIRED for CV screening)
 sentence-transformers
 faiss-cpu
+
+# Google Gemini AI (REQUIRED for CV screening in live mode)
 google-generativeai
+
+# Environment Variables
 python-dotenv
-seaborn
-pypdf
-jupyter
