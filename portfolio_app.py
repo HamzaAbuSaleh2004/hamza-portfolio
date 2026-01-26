@@ -67,7 +67,7 @@ else:
         rag_chatbot = None
 
 app = Flask(__name__)
-app.secret_key = 'hamza-portfolio-secret-key-2026'
+app.secret_key = os.environ.get('SECRET_KEY', 'hamza-portfolio-secret-key-2026')
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'uploads')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
 
@@ -403,9 +403,14 @@ def api_cv_demo_chat():
         return jsonify({"error": str(e)}), 500
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    # Print configuration
     config.print_config()
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=config.DEBUG)
-
-
+    
+    # Use PORT from environment (Render) or default to 5000 (local)
+    port = int(os.environ.get('PORT', 5000))
+    
+    print(f"Running on: http://0.0.0.0:{port}\n")
+    
+    # Run with proper host binding for production environments
+    app.run(host='0.0.0.0', port=port, debug=config.DEBUG)
