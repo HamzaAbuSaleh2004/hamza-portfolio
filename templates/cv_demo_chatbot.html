@@ -1,0 +1,319 @@
+{% extends "portfolio_base.html" %}
+
+{% block title %}CV Demo - Chatbot - Hamza Abu Saleh{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chatbot-container {
+        max-width: 900px;
+        margin: 2rem auto;
+    }
+
+    .chat-window {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chat-header {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .chat-message {
+        display: flex;
+        gap: 1rem;
+        animation: fadeInUp 0.3s ease;
+    }
+
+    .user-message {
+        flex-direction: row-reverse;
+    }
+
+    .message-content {
+        max-width: 70%;
+        padding: 1rem;
+        border-radius: 12px;
+        line-height: 1.6;
+    }
+
+    .user-message .message-content {
+        background: var(--gradient-primary);
+        color: white;
+    }
+
+    .assistant-message .message-content {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--bg-tertiary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .user-message .message-avatar {
+        background: var(--gradient-secondary);
+    }
+
+    .chat-input-area {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+    }
+
+    .chat-input-form {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .chat-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-family: var(--font-primary);
+        font-size: 1rem;
+    }
+
+    .chat-input:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+    }
+
+    .send-btn {
+        padding: 0.75rem 1.5rem;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .send-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .send-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .suggested-questions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .suggestion-btn {
+        padding: 0.5rem 1rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .suggestion-btn:hover {
+        border-color: var(--accent-primary);
+        color: var(--accent-primary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container chatbot-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h1 style="margin-bottom: 0.5rem;">RAG Chatbot</h1>
+                <p style="color: var(--text-secondary);">Ask questions about candidates and get evidence-based answers
+                </p>
+            </div>
+            <a href="{{ url_for('cv_demo_results') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Results
+            </a>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="chat-window">
+            <div class="chat-header">
+                <h3 style="margin: 0; color: white;">
+                    <i class="fas fa-robot"></i> AI Assistant
+                </h3>
+                <p style="margin: 0.5rem 0 0; opacity: 0.9; font-size: 0.9rem;">
+                    Powered by RAG (Retrieval-Augmented Generation)
+                </p>
+            </div>
+
+            <div id="chat-messages" class="chat-messages">
+                <div class="chat-message assistant-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot" style="color: var(--accent-primary);"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm your AI recruitment assistant. I can help you with questions about the candidates
+                            whose CVs were uploaded. Ask me anything!</p>
+                        <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                            <i class="fas fa-lightbulb"></i> Try asking about specific skills, experience, or
+                            qualifications.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <form id="chatbot-form" class="chat-input-form">
+                    <input type="text" id="chat-input" class="chat-input"
+                        placeholder="Ask a question about the candidates..." required autocomplete="off">
+                    <button type="submit" class="send-btn" id="send-btn">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Suggested Questions -->
+        <div class="card" style="margin-top: 2rem;">
+            <h4 style="margin-bottom: 1rem;">
+                <i class="fas fa-question-circle"></i> Suggested Questions
+            </h4>
+            <div class="suggested-questions">
+                <button class="suggestion-btn" onclick="askQuestion('Which candidate has the most Python experience?')">
+                    Which candidate has the most Python experience?
+                </button>
+                <button class="suggestion-btn"
+                    onclick="askQuestion('Compare the machine learning skills of all candidates')">
+                    Compare the machine learning skills
+                </button>
+                <button class="suggestion-btn"
+                    onclick="askQuestion('Who has experience with deep learning frameworks?')">
+                    Who has experience with deep learning?
+                </button>
+                <button class="suggestion-btn" onclick="askQuestion('What projects have the candidates worked on?')">
+                    What projects have they worked on?
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+    const chatForm = document.getElementById('chatbot-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const sendBtn = document.getElementById('send-btn');
+
+    chatForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const query = chatInput.value.trim();
+        if (!query) return;
+
+        // Add user message to chat
+        addMessage('user', query);
+        chatInput.value = '';
+
+        // Disable input while processing
+        sendBtn.disabled = true;
+        sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+        // Show loading message
+        const loadingId = addMessage('assistant', '<i class="fas fa-spinner fa-spin"></i> Thinking...');
+
+        try {
+            const response = await fetch('/api/cv-demo/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: query })
+            });
+
+            const data = await response.json();
+
+            // Remove loading message
+            document.getElementById(loadingId).remove();
+
+            if (data.error) {
+                addMessage('assistant', `<span style="color: var(--accent-warning);">⚠️ Error: ${data.error}</span>`);
+            } else {
+                addMessage('assistant', data.response);
+            }
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            addMessage('assistant', '<span style="color: var(--accent-warning);">⚠️ Error: Failed to get response. Please try again.</span>');
+        } finally {
+            // Re-enable input
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
+            chatInput.focus();
+        }
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+
+    function addMessage(role, content) {
+        const messageId = 'msg-' + Date.now();
+        const messageDiv = document.createElement('div');
+        messageDiv.id = messageId;
+        messageDiv.className = `chat-message ${role}-message`;
+
+        const avatarIcon = role === 'user' ? 'fa-user' : 'fa-robot';
+        const avatarColor = role === 'user' ? 'white' : 'var(--accent-primary)';
+
+        messageDiv.innerHTML = `
+            <div class="message-avatar">
+                <i class="fas ${avatarIcon}" style="color: ${avatarColor};"></i>
+            </div>
+            <div class="message-content">
+                ${content}
+            </div>
+        `;
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        return messageId;
+    }
+
+    function askQuestion(question) {
+        chatInput.value = question;
+        chatInput.focus();
+    }
+</script>
+{% endblock %}
+{% endblock %}

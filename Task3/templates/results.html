@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Results - TechHire Recruitment Portal{% endblock %}
+
+{% block content %}
+<div class="results-page">
+    <h1>📊 Analysis Results</h1>
+
+    <div class="action-buttons">
+        <a href="{{ url_for('chatbot') }}" class="btn btn-primary">💬 Open Chatbot</a>
+        <a href="{{ url_for('step1') }}" class="btn btn-secondary">🔄 New Analysis</a>
+    </div>
+
+    <!-- Vacancy Info -->
+    <section class="result-section">
+        <h2>📌 Vacancy Information</h2>
+        <div class="card">
+            <h3>{{ data.vacancy.title }}</h3>
+            <p><strong>Description:</strong> {{ data.vacancy.description[:200] }}...</p>
+            <div class="keywords-list">
+                <strong>Top Keywords:</strong>
+                {% for keyword, score in data.vacancy.keywords[:10] %}
+                <span class="keyword-tag">{{ keyword }} ({{ "%.3f"|format(score) }})</span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Clustering Results -->
+    <section class="result-section">
+        <h2>🎯 Vacancy Classification</h2>
+        <div class="card">
+            <h3>Cluster: {{ data.cluster_info.cluster_label }}</h3>
+            <p><strong>Cluster ID:</strong> {{ data.cluster_info.cluster_id }}</p>
+            <div class="keywords-list">
+                <strong>Cluster Keywords:</strong>
+                {% for keyword in data.cluster_info.cluster_keywords %}
+                <span class="keyword-tag">{{ keyword }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Candidate Ranking -->
+    <section class="result-section">
+        <h2>🏆 Candidate Ranking</h2>
+        <div class="ranking-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Candidate ID</th>
+                        <th>Similarity Score</th>
+                        <th>Match %</th>
+                        <th>Matched Skills</th>
+                        <th>Missing Skills</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for candidate in data.shortlist %}
+                    <tr class="{% if loop.index <= 3 %}highlight{% endif %}">
+                        <td><strong>{{ loop.index }}</strong></td>
+                        <td>{{ candidate.candidate_id }}</td>
+                        <td>{{ "%.3f"|format(candidate.similarity_score) }}</td>
+                        <td>{{ "%.1f"|format(candidate.match_percentage) }}%</td>
+                        <td>
+                            <div class="skills-list">
+                                {% for skill in candidate.matched_skills[:5] %}
+                                <span class="skill-tag matched">{{ skill }}</span>
+                                {% endfor %}
+                                {% if candidate.matched_skills|length > 5 %}
+                                <span class="skill-tag">+{{ candidate.matched_skills|length - 5 }} more</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="skills-list">
+                                {% for skill in candidate.missing_skills[:3] %}
+                                <span class="skill-tag missing">{{ skill }}</span>
+                                {% endfor %}
+                                {% if candidate.missing_skills|length > 3 %}
+                                <span class="skill-tag">+{{ candidate.missing_skills|length - 3 }} more</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Graph Mining Results -->
+    <section class="result-section">
+        <h2>🕸️ Graph Mining Analysis</h2>
+
+        {% if data.graph_image %}
+        <div class="card">
+            <h3>Candidate Similarity Network</h3>
+            <img src="data:image/png;base64,{{ data.graph_image }}" alt="Candidate Similarity Graph"
+                class="graph-image">
+        </div>
+        {% endif %}
+
+        <div class="grid-2">
+            <div class="card">
+                <h3>📊 Centrality Metrics</h3>
+                <table class="metrics-table">
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>PageRank</th>
+                            <th>Degree</th>
+                            <th>Betweenness</th>
+                            <th>Closeness</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate_id, metrics in data.centrality_metrics.items() %}
+                        <tr>
+                            <td><strong>{{ candidate_id }}</strong></td>
+                            <td>{{ "%.4f"|format(metrics.pagerank) }}</td>
+                            <td>{{ "%.4f"|format(metrics.degree_centrality) }}</td>
+                            <td>{{ "%.4f"|format(metrics.betweenness) }}</td>
+                            <td>{{ "%.4f"|format(metrics.closeness) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>🔍 Insights</h3>
+
+                {% if data.duplicates %}
+                <div class="insight-box warning">
+                    <h4>⚠️ Potential Duplicates</h4>
+                    <ul>
+                        {% for dup in data.duplicates %}
+                        <li>{{ dup.candidate_1 }} ↔ {{ dup.candidate_2 }} ({{ "%.2f"|format(dup.similarity * 100) }}%
+                            similar)</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if data.outliers %}
+                <div class="insight-box info">
+                    <h4>📌 Outlier Candidates</h4>
+                    <ul>
+                        {% for outlier in data.outliers %}
+                        <li>{{ outlier.candidate_id }} ({{ outlier.degree }} connections)</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if not data.duplicates and not data.outliers %}
+                <p>✅ No duplicates or outliers detected</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Text Mining Details -->
+    <section class="result-section">
+        <h2>📄 CV Text Mining Details</h2>
+        {% for cv_data in data.cv_data_list %}
+        <div class="card collapsible">
+            <h3 class="collapsible-header" onclick="toggleCollapse(this)">
+                {{ cv_data.candidate_id }}
+                <span class="toggle-icon">▼</span>
+            </h3>
+            <div class="collapsible-content">
+                <h4>Top Keywords</h4>
+                <div class="keywords-list">
+                    {% for keyword, score in cv_data.keywords[:15] %}
+                    <span class="keyword-tag">{{ keyword }} ({{ "%.3f"|format(score) }})</span>
+                    {% endfor %}
+                </div>
+
+                <h4>Evidence Snippets</h4>
+                <div class="evidence-list">
+                    {% for evidence in cv_data.evidence_snippets[:10] %}
+                    <div class="evidence-item">
+                        <strong>{{ evidence.keyword }}</strong> (Page {{ evidence.page }})
+                        <p class="snippet">{{ evidence.snippet }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</div>
+
+<script>
+    function toggleCollapse(header) {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.toggle-icon');
+
+        if (content.style.display === 'none' || content.style.display === '') {
+            content.style.display = 'block';
+            icon.textContent = '▲';
+        } else {
+            content.style.display = 'none';
+            icon.textContent = '▼';
+        }
+    }
+
+    // Collapse all by default except first
+    document.addEventListener('DOMContentLoaded', function () {
+        const contents = document.querySelectorAll('.collapsible-content');
+        contents.forEach((content, index) => {
+            if (index > 0) {
+                content.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

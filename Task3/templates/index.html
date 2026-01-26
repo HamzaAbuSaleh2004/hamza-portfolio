@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Home - TechHire Recruitment Portal{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>🎯 Welcome to TechHire Recruitment Portal</h1>
+    <p class="subtitle">Intelligent Candidate Screening with AI-Powered Analysis</p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📄</div>
+            <h3>Text Mining</h3>
+            <p>Extract and analyze keywords from CVs with evidence snippets and page references</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Data Mining</h3>
+            <p>Classify vacancies, rank candidates, and match skills automatically</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🕸️</div>
+            <h3>Graph Mining</h3>
+            <p>Analyze candidate similarity networks with centrality metrics</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>RAG Chatbot</h3>
+            <p>Ask questions about candidates with evidence-based responses</p>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <a href="{{ url_for('step1') }}" class="btn btn-primary btn-large">
+            Start New Analysis →
+        </a>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h4>Upload Vacancy & CVs</h4>
+            <p>Enter job requirements and upload up to 10 candidate CVs (PDF format)</p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">2</div>
+            <h4>Automated Analysis</h4>
+            <p>Our AI analyzes CVs, extracts skills, ranks candidates, and builds similarity graphs</p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">3</div>
+            <h4>Review Results</h4>
+            <p>View comprehensive analysis including clustering, ranking, and graph metrics</p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">4</div>
+            <h4>Chat with AI</h4>
+            <p>Ask questions about shortlisted candidates and get evidence-based answers</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

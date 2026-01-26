@@ -1,0 +1,165 @@
+{% extends "portfolio_base.html" %}
+
+{% block title %}CV Screening Demo - Hamza Abu Saleh{% endblock %}
+
+{% block content %}
+<!-- Demo Header -->
+<section class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Advanced Recruitment Screening System</h2>
+            <p>Interactive demo of my CV screening project</p>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Mode Banner -->
+{% if demo_mode %}
+<section class="section" style="padding-top: 0;">
+    <div class="container" style="max-width: 900px; margin: 0 auto;">
+        <div class="card"
+            style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1)); border-left: 4px solid var(--accent-primary); padding: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-info-circle" style="font-size: 2rem; color: var(--accent-primary);"></i>
+                <div>
+                    <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">📊 Demo Mode Active</h4>
+                    <p style="margin: 0; line-height: 1.6;">
+                        You're viewing a <strong>live demonstration</strong> with pre-computed results from 3 sample CVs
+                        (Data Scientist, ML Engineer, Data Analyst).
+                        Upload any PDF files in Step 2 to see the complete analysis pipeline in action.
+                        <br><small style="opacity: 0.8;">
+                            💡 <em>No real API calls are made in demo mode - perfect for showcasing the system!</em>
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Project Overview -->
+<section class="section" style="background: var(--bg-secondary);">
+    <div class="container" style="max-width: 900px; margin: 0 auto;">
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;">About This Project</h3>
+            <p style="margin-bottom: 1rem; line-height: 1.8;">
+                This is a fully functional demonstration of my <strong>Advanced Recruitment Screening System</strong>,
+                which combines multiple data mining techniques to automate and enhance the hiring process.
+            </p>
+
+            <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--accent-primary);">What You Can Test:</h4>
+            <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 2;">
+                <li><strong>Text Mining:</strong> Extract keywords and evidence from CVs with TF-IDF</li>
+                <li><strong>Data Mining:</strong> Candidate clustering, ranking, and skill gap analysis</li>
+                <li><strong>Graph Mining:</strong> PageRank, centrality metrics, duplicate detection</li>
+                <li><strong>RAG Chatbot:</strong> Ask questions about candidates with cited answers</li>
+            </ul>
+
+            <div class="tech-stack" style="margin-top: 1.5rem;">
+                <span class="badge badge-primary">Python</span>
+                <span class="badge badge-primary">Flask</span>
+                <span class="badge badge-primary">TF-IDF</span>
+                <span class="badge badge-primary">K-Means</span>
+                <span class="badge badge-primary">NetworkX</span>
+                <span class="badge badge-primary">Sentence Transformers</span>
+                <span class="badge badge-primary">Gemini API</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Status -->
+<section class="section">
+    <div class="container" style="max-width: 700px; margin: 0 auto; text-align: center;">
+        {% if cv_available %}
+        <div class="card" style="background: rgba(16, 185, 129, 0.1); border-color: var(--accent-success);">
+            <i class="fas fa-check-circle"
+                style="font-size: 3rem; color: var(--accent-success); margin-bottom: 1rem;"></i>
+            <h3 style="color: var(--accent-success);">Demo is Ready!</h3>
+            <p style="margin-bottom: 2rem;">All systems operational. Click below to start testing the CV screening
+                system.</p>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ url_for('cv_demo_step1') }}" class="btn btn-primary">
+                    <i class="fas fa-play"></i> Start Demo
+                </a>
+                <a href="{{ url_for('project_detail', project_id='cv-screening') }}" class="btn btn-outline">
+                    <i class="fas fa-info-circle"></i> Project Details
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="card" style="background: rgba(245, 158, 11, 0.1); border-color: var(--accent-warning);">
+            <i class="fas fa-exclamation-triangle"
+                style="font-size: 3rem; color: var(--accent-warning); margin-bottom: 1rem;"></i>
+            <h3 style="color: var(--accent-warning);">Demo Currently Unavailable</h3>
+            <p style="margin-bottom: 1.5rem;">
+                The CV screening models need to be initialized. Please ensure the required models
+                (<code>tfidf_vectorizer.pkl</code> and <code>kmeans_model.pkl</code>) are in the <code>Data/</code>
+                folder.
+            </p>
+            <a href="{{ url_for('project_detail', project_id='cv-screening') }}" class="btn btn-primary">
+                View Project Details
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-title">
+            <h2>How It Works</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div class="card">
+                <div
+                    style="background: var(--gradient-primary); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                    <i class="fas fa-file-alt" style="color: white; font-size: 1.5rem;"></i>
+                </div>
+                <h4>Step 1: Enter Job Details</h4>
+                <p>Provide the job title and description for the vacancy you're recruiting for.</p>
+            </div>
+
+            <div class="card">
+                <div
+                    style="background: var(--gradient-primary); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                    <i class="fas fa-upload" style="color: white; font-size: 1.5rem;"></i>
+                </div>
+                <h4>Step 2: Upload CVs</h4>
+                <p>Upload up to 10 PDF CVs for analysis and ranking.</p>
+            </div>
+
+            <div class="card">
+                <div
+                    style="background: var(--gradient-primary); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                    <i class="fas fa-chart-line" style="color: white; font-size: 1.5rem;"></i>
+                </div>
+                <h4>Step 3: View Results</h4>
+                <p>See comprehensive analysis including rankings, clusters, and insights.</p>
+            </div>
+
+            <div class="card">
+                <div
+                    style="background: var(--gradient-primary); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                    <i class="fas fa-comments" style="color: white; font-size: 1.5rem;"></i>
+                </div>
+                <h4>Step 4: Chat with AI</h4>
+                <p>Ask questions about candidates and get evidence-based answers.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back to Projects -->
+<section class="section" style="text-align: center;">
+    <div class="container">
+        <a href="{{ url_for('projects') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to All Projects
+        </a>
+    </div>
+</section>
+{% endblock %}

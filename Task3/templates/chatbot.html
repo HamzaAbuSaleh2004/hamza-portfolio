@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Chatbot - TechHire Recruitment Portal{% endblock %}
+
+{% block content %}
+<div class="chatbot-page">
+    <h1>🤖 RAG Chatbot - Evidence-Based Q&A</h1>
+    <p class="subtitle">Ask questions about shortlisted candidates. All responses are backed by CV evidence.</p>
+
+    <div class="chatbot-info">
+        <div class="info-card">
+            <strong>📚 Vector Database:</strong> {{ num_chunks }} chunks indexed
+        </div>
+        <div class="info-card">
+            <strong>👥 Shortlisted Candidates:</strong>
+            {% for candidate in shortlist %}
+            <span class="candidate-badge">{{ candidate.candidate_id }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="chatbot-container">
+        <div class="chat-sidebar">
+            <h3>💡 Quick Actions</h3>
+
+            <div class="quick-actions">
+                <h4>Generate Interview Questions</h4>
+                {% for candidate in shortlist %}
+                <button class="btn btn-small" onclick="generateQuestions('{{ candidate.candidate_id }}')">
+                    📝 {{ candidate.candidate_id }}
+                </button>
+                {% endfor %}
+            </div>
+
+            <div class="sample-queries">
+                <h4>Sample Questions</h4>
+                <ul>
+                    <li onclick="askQuestion('What programming languages do the candidates know?')">
+                        What programming languages do the candidates know?
+                    </li>
+                    <li onclick="askQuestion('Which candidates have machine learning experience?')">
+                        Which candidates have machine learning experience?
+                    </li>
+                    <li onclick="askQuestion('What cloud platforms are mentioned in the CVs?')">
+                        What cloud platforms are mentioned in the CVs?
+                    </li>
+                    <li onclick="askQuestion('Which candidate has the most relevant project experience?')">
+                        Which candidate has the most relevant project experience?
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chat-main">
+            <div id="chat-messages" class="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <strong>🤖 Assistant:</strong>
+                        <p>Hello! I'm your recruitment assistant. I can answer questions about the shortlisted
+                            candidates based on their CVs. All my responses are backed by evidence from the actual
+                            documents.</p>
+                        <p>Try asking me about candidates' skills, experience, or qualifications!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Ask a question about the candidates..."
+                    onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-link">
+        <a href="{{ url_for('results') }}" class="btn btn-secondary">← Back to Results</a>
+    </div>
+</div>
+
+<script>
+    function askQuestion(question) {
+        document.getElementById('chat-input').value = question;
+        sendMessage();
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chat-input');
+        const query = input.value.trim();
+
+        if (!query) return;
+
+        // Add user message
+        addMessage('user', query);
+        input.value = '';
+
+        // Show loading
+        const loadingId = addMessage('bot', '⏳ Searching CVs and generating response...');
+
+        // Send to API
+        fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Remove loading message
+                document.getElementById(loadingId).remove();
+
+                // Add bot response
+                let responseHtml = '<p>' + data.response + '</p>';
+
+                if (data.has_evidence && data.retrieved_chunks) {
+                    responseHtml += '<div class="evidence-section">';
+                    responseHtml += '<h4>📚 Retrieved Evidence:</h4>';
+                    responseHtml += '<ul class="evidence-list-compact">';
+
+                    data.retrieved_chunks.slice(0, 5).forEach((chunk, idx) => {
+                        responseHtml += `<li><strong>${chunk.candidate_id}</strong> (Page ${chunk.page}): ${chunk.text.substring(0, 150)}...</li>`;
+                    });
+
+                    responseHtml += '</ul></div>';
+                } else if (data.debug) {
+                    responseHtml += `<p class="debug-info"><em>${data.debug}</em></p>`;
+                }
+
+                addMessage('bot', responseHtml);
+            })
+            .catch(error => {
+                document.getElementById(loadingId).remove();
+                addMessage('bot', '❌ Error: ' + error.message);
+            });
+    }
+
+    function generateQuestions(candidateId) {
+        const loadingId = addMessage('bot', `⏳ Generating interview questions for ${candidateId}...`);
+
+        fetch(`/api/interview_questions/${candidateId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(loadingId).remove();
+
+                let html = `<h4>📝 Interview Questions for ${candidateId}:</h4><ol>`;
+                data.questions.forEach(q => {
+                    html += `<li>${q}</li>`;
+                });
+                html += '</ol>';
+
+                addMessage('bot', html);
+            })
+            .catch(error => {
+                document.getElementById(loadingId).remove();
+                addMessage('bot', '❌ Error generating questions: ' + error.message);
+            });
+    }
+
+    function addMessage(type, content) {
+        const messagesDiv = document.getElementById('chat-messages');
+        const messageId = 'msg-' + Date.now();
+
+        const messageDiv = document.createElement('div');
+        messageDiv.id = messageId;
+        messageDiv.className = `message ${type}-message`;
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+
+        const label = type === 'user' ? '👤 You:' : '🤖 Assistant:';
+        contentDiv.innerHTML = `<strong>${label}</strong>${content}`;
+
+        messageDiv.appendChild(contentDiv);
+        messagesDiv.appendChild(messageDiv);
+
+        // Scroll to bottom
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        return messageId;
+    }
+</script>
+{% endblock %}

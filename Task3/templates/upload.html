@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Upload - TechHire Recruitment Portal{% endblock %}
+
+{% block content %}
+<div class="upload-page">
+    <h1>📋 New Recruitment Analysis</h1>
+    <p class="subtitle">Upload vacancy details and candidate CVs for intelligent screening</p>
+
+    {% if error %}
+    <div class="alert alert-error">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" class="upload-form">
+        <div class="form-section">
+            <h3>📌 Vacancy Details</h3>
+
+            <div class="form-group">
+                <label for="vacancy_title">Job Title *</label>
+                <input type="text" id="vacancy_title" name="vacancy_title" required
+                    placeholder="e.g., Senior Data Scientist">
+            </div>
+
+            <div class="form-group">
+                <label for="vacancy_description">Job Description *</label>
+                <textarea id="vacancy_description" name="vacancy_description" required rows="8"
+                    placeholder="Enter the complete job description including required skills, experience, and responsibilities..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>📄 Candidate CVs</h3>
+
+            <div class="form-group">
+                <label for="cv_files">Upload CV Files (PDF only, max 10 files) *</label>
+                <input type="file" id="cv_files" name="cv_files" multiple accept=".pdf" required>
+                <small class="help-text">Select up to 10 PDF files. Each file will be processed as a separate
+                    candidate.</small>
+            </div>
+
+            <div id="file-list" class="file-list"></div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">
+                🚀 Analyze Candidates
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Display selected files
+    document.getElementById('cv_files').addEventListener('change', function (e) {
+        const fileList = document.getElementById('file-list');
+        const files = e.target.files;
+
+        if (files.length > 10) {
+            alert('Maximum 10 files allowed. Please select fewer files.');
+            e.target.value = '';
+            fileList.innerHTML = '';
+            return;
+        }
+
+        let html = '<h4>Selected Files (' + files.length + '):</h4><ul>';
+        for (let i = 0; i < files.length; i++) {
+            html += '<li>📄 ' + files[i].name + ' (' + (files[i].size / 1024).toFixed(1) + ' KB)</li>';
+        }
+        html += '</ul>';
+        fileList.innerHTML = html;
+    });
+</script>
+{% endblock %}

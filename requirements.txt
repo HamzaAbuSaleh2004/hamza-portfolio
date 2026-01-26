@@ -1,0 +1,15 @@
+Flask==3.0.0
+numpy
+pandas
+scikit-learn
+joblib
+PyPDF2
+networkx
+matplotlib
+sentence-transformers
+faiss-cpu
+google-generativeai
+python-dotenv
+seaborn
+pypdf
+jupyter

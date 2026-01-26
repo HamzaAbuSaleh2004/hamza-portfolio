@@ -1,0 +1,52 @@
+📋 GitHub Upload Checklist
+========================
+
+Files to Upload to GitHub:
+--------------------------
+
+✅ UPLOAD these files/folders:
+
+REQUIRED FILES:
+□ README.md
+□ DEPLOYMENT.md  
+□ QUICK_DEPLOY_GUIDE.md
+□ .gitignore (important!)
+□ .env.example
+□ requirements.txt
+□ config.py
+□ portfolio_app.py
+□ demo_data.py
+□ projects_data.py
+
+REQUIRED FOLDERS:
+□ static/ (with css, js, images subfolders)
+□ templates/ (all HTML files)
+□ screenshots/ (with cv-screening-demo & charging-portal)
+□ Task3/ (CV screening modules)
+□ Data/ (optional, but useful)
+□ tests/ (optional)
+
+❌ DO NOT UPLOAD:
+□ .venv/ folder (virtual environment - too large)
+□ .env file (if it exists - contains secrets)
+□ __pycache__/ folders (auto-generated)
+□ *.pyc files (compiled Python)
+□ uploads/ folder (user uploads)
+
+TOTAL FILES: ~50-60 files
+TOTAL SIZE: ~5-8 MB (without .venv)
+
+How to Select Files for Upload:
+-------------------------------
+1. Open Windows Explorer
+2. Navigate to C:\Users\monay\Desktop\Portfolio
+3. Enable "Show hidden files": View → Show → Hidden items
+4. Select ALL files and folders EXCEPT .venv
+5. Drag and drop into GitHub upload page
+
+Environment Variable for Render:
+--------------------------------
+Key: PORTFOLIO_DEMO_MODE
+Value: True
+
+That's it! ✅

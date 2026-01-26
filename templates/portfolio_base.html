@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="{% block meta_description %}Hamza Abu Saleh - Aspiring Data Scientist specializing in AI, Machine Learning, and NLP{% endblock %}">
+    <meta name="keywords" content="Data Science, AI, Machine Learning, NLP, Computer Vision, Flask, Python">
+    <meta name="author" content="Hamza Abu Saleh">
+
+    <title>{% block title %}Hamza Abu Saleh - Data Science Portfolio{% endblock %}</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio.css') }}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('home') }}" class="navbar-brand">Hamza Abu Saleh</a>
+
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('projects') }}">Projects</a></li>
+
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Hamza Abu Saleh. All rights reserved.</p>
+            <p>Data Science & AI Student at HTU | Amman, Jordan</p>
+            <div style="margin-top: 1rem;">
+                <a href="{{ personal.linkedin }}" target="_blank" style="margin: 0 0.5rem; font-size: 1.5rem;">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="mailto:{{ personal.email }}" style="margin: 0 0.5rem; font-size: 1.5rem;">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

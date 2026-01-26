@@ -1,0 +1,125 @@
+{% extends "portfolio_base.html" %}
+
+{% block title %}Contact - Hamza Abu Saleh{% endblock %}
+
+{% block content %}
+<!-- Contact Header -->
+<section class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Get In Touch</h2>
+            <p>Let's connect and discuss opportunities, collaborations, or projects</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Information -->
+<section class="section">
+    <div class="container">
+        <div class="contact-info">
+            <!-- Email -->
+            <div class="card contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>Email</h3>
+                <a href="mailto:{{ personal.email }}" style="font-size: 1.1rem;">{{ personal.email }}</a>
+            </div>
+
+            <!-- Phone -->
+            <div class="card contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <h3>Phone</h3>
+                <a href="tel:{{ personal.phone }}" style="font-size: 1.1rem;">{{ personal.phone }}</a>
+            </div>
+
+            <!-- LinkedIn -->
+            <div class="card contact-item">
+                <div class="contact-icon">
+                    <i class="fab fa-linkedin"></i>
+                </div>
+                <h3>LinkedIn</h3>
+                <a href="{{ personal.linkedin }}" target="_blank" style="font-size: 1.1rem;">Connect on LinkedIn</a>
+            </div>
+
+            <!-- Location -->
+            <div class="card contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3>Location</h3>
+                <p style="font-size: 1.1rem;">{{ personal.location }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Contact -->
+<section class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 style="margin-bottom: 1.5rem;">I'm Currently Open To</h2>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <div class="card">
+                    <i class="fas fa-briefcase"
+                        style="font-size: 2rem; color: var(--accent-primary); margin-bottom: 1rem;"></i>
+                    <h4>Job Opportunities</h4>
+                    <p style="font-size: 0.9rem;">Data Science & AI roles</p>
+                </div>
+
+                <div class="card">
+                    <i class="fas fa-handshake"
+                        style="font-size: 2rem; color: var(--accent-secondary); margin-bottom: 1rem;"></i>
+                    <h4>Collaborations</h4>
+                    <p style="font-size: 0.9rem;">Research & development projects</p>
+                </div>
+
+                <div class="card">
+                    <i class="fas fa-graduation-cap"
+                        style="font-size: 2rem; color: var(--accent-success); margin-bottom: 1rem;"></i>
+                    <h4>Learning</h4>
+                    <p style="font-size: 0.9rem;">Internships & mentorship</p>
+                </div>
+
+                <div class="card">
+                    <i class="fas fa-rocket"
+                        style="font-size: 2rem; color: var(--accent-warning); margin-bottom: 1rem;"></i>
+                    <h4>Freelance Work</h4>
+                    <p style="font-size: 0.9rem;">ML & AI consulting</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Social Media Links -->
+<section class="section" style="text-align: center;">
+    <div class="container">
+        <h2 style="margin-bottom: 2rem;">Connect on Social Media</h2>
+        <div style="display: flex; gap: 2rem; justify-content: center; font-size: 3rem;">
+            <a href="{{ personal.linkedin }}" target="_blank" style="color: var(--accent-primary);">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="mailto:{{ personal.email }}" style="color: var(--accent-secondary);">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="background: var(--gradient-primary); text-align: center; padding: 3rem 0;">
+    <div class="container">
+        <h2 style="color: white;">Haven't checked out my work yet?</h2>
+        <p style="color: white; opacity: 0.9; margin-bottom: 2rem;">Explore my projects to see what I can do</p>
+        <a href="{{ url_for('projects') }}" class="btn btn-secondary"
+            style="background: white; color: var(--accent-primary);">
+            <i class="fas fa-th"></i> View Projects
+        </a>
+    </div>
+</section>
+{% endblock %}

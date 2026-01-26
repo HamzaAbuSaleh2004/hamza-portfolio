@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Step 1: Vacancy Details - TechHire{% endblock %}
+
+{% block content %}
+<div class="upload-page">
+    <div class="steps-indicator">
+        <span class="step active">Step 1: Vacancy</span>
+        <span class="arrow">→</span>
+        <span class="step">Step 2: Upload CVs</span>
+        <span class="arrow">→</span>
+        <span class="step">Step 3: Results</span>
+    </div>
+
+    <h1>📌 Step 1: Define the Role</h1>
+    <p class="subtitle">First, tell us about the position you are hiring for.</p>
+
+    {% if error %}
+    <div class="alert alert-error">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" class="upload-form">
+        <div class="form-section">
+            <div class="form-group">
+                <label for="vacancy_title">Job Title *</label>
+                <input type="text" id="vacancy_title" name="vacancy_title" required
+                    placeholder="e.g., Senior Data Scientist" value="{{ vacancy_title if vacancy_title else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="vacancy_description">Job Description *</label>
+                <textarea id="vacancy_description" name="vacancy_description" required rows="10"
+                    placeholder="Enter the complete job description including required skills, experience, and responsibilities...">{{ vacancy_description if vacancy_description else '' }}</textarea>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">
+                Next: Upload CVs →
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
