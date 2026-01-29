@@ -6,13 +6,12 @@
 <!-- Hero Section -->
 <section class="hero">
     <div class="container">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 3rem; flex-wrap: wrap;">
+        <div class="hero-layout">
             <!-- Text Content -->
-            <div style="flex: 1; min-width: 300px;">
-                <h1>
-                    Hi, I'm <span class="hero-gradient">Hamza Abu Saleh</span>
-                </h1>
+            <div class="hero-content">
+                <h1>Hi, I'm <span class="hero-gradient">Hamza Abu Saleh</span></h1>
                 <p>{{ personal.headline }}</p>
+
                 <div class="hero-cta">
                     <a href="{{ url_for('projects') }}" class="btn btn-primary">View My Projects</a>
                     <a href="{{ url_for('contact') }}" class="btn btn-outline">Get in Touch</a>
@@ -20,18 +19,9 @@
             </div>
 
             <!-- Profile Photo -->
-            <div style="flex: 0 0 auto;">
-                <div style="position: relative; width: 280px; height: 280px;">
-                    <!-- Gradient background circle -->
-                    <div
-                        style="position: absolute; inset: 0; background: var(--gradient-primary); border-radius: 50%; opacity: 0.2; filter: blur(20px);">
-                    </div>
-                    <!-- Photo container -->
-                    <img src="{{ url_for('static', filename='images/my-photo.jpg') }}"
-                        alt="Hamza Abu Saleh - Data Scientist"
-                        style="position: relative; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent-primary); box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3); transition: transform 0.3s ease;"
-                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                </div>
+            <div class="hero-image-wrap">
+                <img src="{{ url_for('static', filename='images/my-photo.png') }}"
+                    alt="Hamza Abu Saleh - Data Scientist" class="hero-image" />
             </div>
         </div>
     </div>

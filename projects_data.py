@@ -7,7 +7,7 @@ PROJECTS = {
     "charging-portal": {
         "id": "charging-portal",
         "title": "Charging Intelligence Portal",
-        "category": "Web",
+        "category": "ML",
         "tags": ["ML", "Flask", "XAI"],
         "one_liner": "EV charging analytics platform with ML, RL, XAI, fairness, fuzzy logic, and anomaly detection",
         "description": """
@@ -27,7 +27,12 @@ PROJECTS = {
         "github": "#",
         "demo": "#",
         "docs": "#",
-        "screenshots": []
+        "screenshots": [
+            "charging-portal/1.png", "charging-portal/2.png", "charging-portal/3.png", 
+            "charging-portal/4.png", "charging-portal/5.png", "charging-portal/6.png",
+            "charging-portal/7.png", "charging-portal/8.png", "charging-portal/9.png", 
+            "charging-portal/10.png", "charging-portal/11.png", "charging-portal/12.png"
+        ]
     },
     
     "cv-screening": {
@@ -137,7 +142,7 @@ CATEGORIES = {
     "CV": ["cv-screening"],
     "NLP": ["arabic-nlp", "cv-screening"],
     "ML": ["charging-portal", "vehicle-classification", "ml-portfolio"],
-    "Web": ["charging-portal", "cv-screening"]
+    "Web": ["cv-screening"]
 }
 
 def get_project(project_id):
