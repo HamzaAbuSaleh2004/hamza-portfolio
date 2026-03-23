@@ -1,0 +1,278 @@
+{% extends "portfolio_base.html" %}
+
+{% block title %}CV Demo - Results - Hamza Abu Saleh{% endblock %}
+
+{% block extra_css %}
+<style>
+    .results-section {
+        margin-bottom: 3rem;
+    }
+
+    .results-tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 0.75rem 1.5rem;
+        background: var(--bg-card);
+        border: 2px solid var(--border-color);
+        color: var(--text-secondary);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .tab-btn:hover,
+    .tab-btn.active {
+        border-color: var(--accent-primary);
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--accent-primary);
+    }
+
+    .results-content {
+        display: none;
+    }
+
+    .results-content.active {
+        display: block;
+    }
+
+    .candidate-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .candidate-card:hover {
+        border-color: var(--accent-primary);
+        transform: translateY(-2px);
+    }
+
+    .rank-badge {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        color: white;
+        font-weight: 700;
+        text-align: center;
+        line-height: 40px;
+        margin-right: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 1200px;">
+        <div
+            style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; margin-bottom: 2rem;">
+            <div>
+                <h1 style="margin-bottom: 0.5rem;">Analysis Results</h1>
+                <p style="color: var(--text-secondary);">Job: <strong>{{ job_title }}</strong></p>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <a href="{{ url_for('cv_demo_chatbot') }}" class="btn btn-primary">
+                    <i class="fas fa-comments"></i> Chat with AI
+                </a>
+                <a href="{{ url_for('cv_demo_step1') }}" class="btn btn-outline">
+                    <i class="fas fa-redo"></i> Start Over
+                </a>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="results-tabs">
+            <button class="tab-btn active" data-tab="text">
+                <i class="fas fa-text-width"></i> Text Mining
+            </button>
+            <button class="tab-btn" data-tab="data">
+                <i class="fas fa-chart-bar"></i> Data Mining
+            </button>
+            <button class="tab-btn" data-tab="graph">
+                <i class="fas fa-project-diagram"></i> Graph Mining
+            </button>
+        </div>
+
+        <!-- Text Mining Results -->
+        <div id="tab-text" class="results-content active">
+            <div class="results-section">
+                <h2><i class="fas fa-text-width"></i> Text Mining Results</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                    Keyword extraction and evidence snippets from CVs using TF-IDF
+                </p>
+
+                {% if text_results %}
+                {% for cv_name, cv_data in text_results.items() %}
+                <div class="candidate-card">
+                    <h3 style="margin-bottom: 1rem;">
+                        <i class="fas fa-file-pdf" style="color: var(--accent-primary);"></i>
+                        {{ cv_name }}
+                    </h3>
+
+                    {% if cv_data.keywords %}
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Top Keywords:</strong>
+                        <div class="tech-stack" style="margin-top: 0.5rem;">
+                            {% for keyword in cv_data.keywords[:10] %}
+                            <span class="badge badge-primary">{{ keyword }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if cv_data.evidence %}
+                    <div>
+                        <strong>Evidence Snippets:</strong>
+                        <ul style="list-style-position: inside; color: var(--text-secondary); margin-top: 0.5rem;">
+                            {% for evidence in cv_data.evidence[:5] %}
+                            <li style="margin-bottom: 0.5rem;">{{ evidence }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="card">
+                    <p style="color: var(--text-muted);">No text mining results available.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Data Mining Results -->
+        <div id="tab-data" class="results-content">
+            <div class="results-section">
+                <h2><i class="fas fa-chart-bar"></i> Data Mining Results</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                    K-Means clustering, similarity ranking, and skill gap analysis
+                </p>
+
+                {% if data_results %}
+                {% if data_results.rankings %}
+                <h3 style="margin-bottom: 1.5rem;">Candidate Rankings</h3>
+                {% for item in data_results.rankings %}
+                <div class="candidate-card">
+                    <div style="display: flex; align-items: center;">
+                        <span class="rank-badge">{{ loop.index }}</span>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 0.5rem;">{{ item.name }}</h4>
+                            <p style="color: var(--text-secondary); margin: 0;">
+                                Similarity Score: <strong style="color: var(--accent-primary);">{{
+                                    "%.2f"|format(item.score * 100) }}%</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if data_results.clusters %}
+                <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">Candidate Clusters</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    {% for cluster_id, candidates in data_results.clusters.items() %}
+                    <div class="card">
+                        <h4 style="margin-bottom: 1rem;">Cluster {{ cluster_id }}</h4>
+                        <ul style="list-style: none; color: var(--text-secondary);">
+                            {% for candidate in candidates %}
+                            <li style="margin-bottom: 0.5rem;">
+                                <i class="fas fa-user"></i> {{ candidate }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="card">
+                    <p style="color: var(--text-muted);">No data mining results available.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Graph Mining Results -->
+        <div id="tab-graph" class="results-content">
+            <div class="results-section">
+                <h2><i class="fas fa-project-diagram"></i> Graph Mining Results</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                    Network analysis with PageRank and centrality metrics
+                </p>
+
+                {% if graph_results %}
+                {% if graph_results.pagerank %}
+                <h3 style="margin-bottom: 1.5rem;">PageRank Scores</h3>
+                {% for cv_name, score in graph_results.pagerank.items() %}
+                <div class="candidate-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>{{ cv_name }}</h4>
+                        <span class="badge badge-gradient">{{ "%.4f"|format(score) }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if graph_results.centrality %}
+                <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">Centrality Metrics</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                    Degree, betweenness, and closeness centrality measures
+                </p>
+                {% endif %}
+                {% else %}
+                <div class="card">
+                    <p style="color: var(--text-muted);">No graph mining results available.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="card"
+            style="background: var(--gradient-primary); border: none; margin-top: 3rem; text-align: center;">
+            <h3 style="color: white; margin-bottom: 1rem;">
+                <i class="fas fa-lightbulb"></i> Want deeper insights?
+            </h3>
+            <p style="color: white; opacity: 0.9; margin-bottom: 1.5rem;">
+                Use the RAG chatbot to ask specific questions about candidates and get evidence-based answers
+            </p>
+            <a href="{{ url_for('cv_demo_chatbot') }}" class="btn btn-secondary"
+                style="background: white; color: var(--accent-primary);">
+                <i class="fas fa-comments"></i> Open Chatbot
+            </a>
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.results-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const tabName = this.getAttribute('data-tab');
+
+            // Update buttons
+            tabBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            // Update content
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById('tab-' + tabName).classList.add('active');
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

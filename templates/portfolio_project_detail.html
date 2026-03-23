@@ -1,0 +1,134 @@
+{% extends "portfolio_base.html" %}
+
+{% block title %}{{ project.title }} - Hamza Abu Saleh{% endblock %}
+
+{% block content %}
+<!-- Project Header -->
+<section class="section">
+    <div class="container">
+        <a href="{{ url_for('projects') }}"
+            style="color: var(--text-muted); margin-bottom: 1rem; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Back to Projects
+        </a>
+
+        <div style="margin-top: 2rem;">
+            <span class="project-category" style="font-size: 0.9rem;">{{ project.category }}</span>
+            <h1 style="margin: 1rem 0;">{{ project.title }}</h1>
+            <p style="font-size: 1.2rem; color: var(--text-secondary);">{{ project.one_liner }}</p>
+
+            <!-- Tags -->
+            <div class="tech-stack" style="margin-top: 1.5rem;">
+                {% for tag in project.tags %}
+                <span class="badge badge-gradient">{{ tag }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Details -->
+<section class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 3rem; max-width: 1000px; margin: 0 auto;">
+
+            <!-- Description -->
+            <div>
+                <h2>Overview</h2>
+                <p style="font-size: 1.1rem; line-height: 1.8;">{{ project.description }}</p>
+            </div>
+
+            <!-- Tech Stack -->
+            <div>
+                <h2>Tech Stack</h2>
+                <div class="tech-stack" style="margin-top: 1rem;">
+                    {% for tech in project.tech_stack %}
+                    <span class="badge badge-primary">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Key Highlights -->
+            <div>
+                <h2>Key Highlights</h2>
+                <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 2;">
+                    {% for highlight in project.highlights %}
+                    <li style="margin-bottom: 0.75rem;">{{ highlight }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Impact -->
+            <div class="card" style="background: var(--gradient-primary); border: none;">
+                <h3 style="color: white; margin-bottom: 1rem;">
+                    <i class="fas fa-lightbulb"></i> Impact
+                </h3>
+                <p style="color: white; font-size: 1.1rem; opacity: 0.95;">{{ project.impact }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Screenshots -->
+{% if project.screenshots %}
+<section class="section">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Screenshots</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            {% for screenshot in project.screenshots %}
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <img src="{{ url_for('static', filename='images/' + screenshot) }}" alt="{{ project.title }} screenshot"
+                    style="width: 100%; height: auto; display: block;">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Links -->
+<section class="section" style="background: var(--bg-secondary); text-align: center;">
+    <div class="container" style="max-width: 700px; margin: 0 auto;">
+        <h2>Project Links</h2>
+        <p style="margin-bottom: 2rem;">Explore the code, try the demo, or read the documentation</p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            {% if project.demo and project.demo != '#' %}
+            <a href="{{ project.demo }}" class="btn btn-primary">
+                <i class="fas fa-play"></i> Live Demo
+            </a>
+            {% else %}
+            <button class="btn btn-secondary" disabled>
+                <i class="fas fa-play"></i> Demo Coming Soon
+            </button>
+            {% endif %}
+
+            {% if project.github and project.github != '#' %}
+            <a href="{{ project.github }}" target="_blank" class="btn btn-outline">
+                <i class="fab fa-github"></i> View on GitHub
+            </a>
+            {% else %}
+            <button class="btn btn-secondary" disabled>
+                <i class="fab fa-github"></i> GitHub Coming Soon
+            </button>
+            {% endif %}
+
+            {% if project.docs and project.docs != '#' %}
+            <a href="{{ project.docs }}" target="_blank" class="btn btn-outline">
+                <i class="fas fa-book"></i> Documentation
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Related Projects CTA -->
+<section class="section" style="text-align: center;">
+    <div class="container">
+        <h2>Explore More Projects</h2>
+        <p style="margin-bottom: 2rem;">Check out my other work in AI, ML, and NLP</p>
+        <a href="{{ url_for('projects') }}" class="btn btn-primary">
+            <i class="fas fa-th"></i> View All Projects
+        </a>
+    </div>
+</section>
+{% endblock %}

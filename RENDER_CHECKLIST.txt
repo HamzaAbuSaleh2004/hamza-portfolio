@@ -1,0 +1,93 @@
+# 📋 RENDER DEPLOYMENT CHECKLIST
+
+## Copy this SECRET_KEY for Render:
+```
+a8ba7007aa453a727f6743df073b14eedf50327dcc87898d7ec145bcfa27ae02
+```
+
+## Step-by-Step Render Setup
+
+### 1. Upload to GitHub First
+Make sure these files are uploaded:
+- `portfolio_app.py` (fixed)
+- `requirements-demo.txt` (new)
+- `requirements.txt` (with gunicorn)
+
+### 2. Render Dashboard → Settings
+
+**Build & Deploy:**
+```
+Build Command: pip install -r requirements-demo.txt
+Start Command: gunicorn -b 0.0.0.0:$PORT portfolio_app:app
+```
+
+**Environment Variables** (click "Add Environment Variable"):
+
+| Key | Value |
+|-----|-------|
+| `PORTFOLIO_DEMO_MODE` | `True` |
+| `SECRET_KEY` | `a8ba7007aa453a727f6743df073b14eedf50327dcc87898d7ec145bcfa27ae02` |
+
+### 3. Deploy
+
+Click "Manual Deploy" → "Deploy latest commit"
+
+⏱️ **Expected: ~1-2 minutes** (with demo requirements)
+
+### 4. Verify
+
+✅ Homepage loads  
+✅ Navigation works  
+✅ Projects page displays  
+✅ CV demo shows sample data  
+
+---
+
+## 🎯 What Each Setting Does
+
+**`requirements-demo.txt`:**
+- Only 3 packages (Flask, Gunicorn, python-dotenv)
+- 50 MB install vs 1.5 GB
+- **Much faster deployment**
+
+**`gunicorn -b 0.0.0.0:$PORT portfolio_app:app`:**
+- `portfolio_app` = your file name
+- `app` = Flask object in that file
+- `$PORT` = Render assigns this automatically
+
+**`PORTFOLIO_DEMO_MODE=True`:**
+- Uses pre-computed sample data
+- No API calls
+- No costs
+
+**`SECRET_KEY`:**
+- Secures Flask sessions
+- Random 64-character hex string
+- Keep it secret!
+
+---
+
+## ⚠️ Common Issues
+
+**Build takes 5+ minutes?**
+→ You're using `requirements.txt` instead of `requirements-demo.txt`
+
+**App crashes with "cannot find app"?**
+→ Start command should be `portfolio_app:app` not `portfolio_app:portfolio_app`
+
+**SECRET_KEY error?**
+→ Add it to Environment Variables in Render dashboard
+
+---
+
+## ✨ After Successful Deploy
+
+Your portfolio will be live at:
+`https://your-service-name.onrender.com`
+
+Update your:
+- LinkedIn profile
+- GitHub README
+- CV/Resume
+
+🎉 **You're done!**

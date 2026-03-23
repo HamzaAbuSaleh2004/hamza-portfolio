@@ -1,0 +1,251 @@
+{% extends "portfolio_base.html" %}
+
+{% block title %}CV Demo - Step 2 - Hamza Abu Saleh{% endblock %}
+
+{% block extra_css %}
+<style>
+    .demo-container {
+        max-width: 700px;
+        margin: 2rem auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .file-upload-area {
+        border: 2px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 3rem 2rem;
+        text-align: center;
+        background: var(--bg-tertiary);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .file-upload-area:hover {
+        border-color: var(--accent-primary);
+        background: rgba(99, 102, 241, 0.05);
+    }
+
+    .file-upload-area.dragover {
+        border-color: var(--accent-primary);
+        background: rgba(99, 102, 241, 0.1);
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .stepper {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .stepper::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--border-color);
+        z-index: -1;
+    }
+
+    .step {
+        background: var(--bg-card);
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        position: relative;
+    }
+
+    .step.active {
+        background: var(--gradient-primary);
+        border-color: var(--accent-primary);
+        color: white;
+    }
+
+    .step.completed {
+        background: var(--accent-success);
+        border-color: var(--accent-success);
+        color: white;
+    }
+
+    .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid #ef4444;
+        color: #fca5a5;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container demo-container">
+        <a href="{{ url_for('cv_demo_step1') }}"
+            style="color: var(--text-muted); margin-bottom: 1rem; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Back to Step 1
+        </a>
+
+        <h1 style="margin: 2rem 0 1rem;">Step 2: Upload CVs</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+            Upload candidate CVs in PDF format (maximum 10 files).
+        </p>
+
+        <!-- Stepper -->
+        <div class="stepper">
+            <div class="step completed">1</div>
+            <div class="step active">2</div>
+            <div class="step">3</div>
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Upload Form -->
+        <div class="card">
+            <form method="POST" action="{{ url_for('cv_demo_step2') }}" enctype="multipart/form-data" id="upload-form">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-file-pdf"></i> CV Files (PDF only)
+                    </label>
+
+                    <div class="file-upload-area" id="file-upload-area">
+                        <i class="fas fa-cloud-upload-alt"
+                            style="font-size: 3rem; color: var(--accent-primary); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--text-primary); font-weight: 600; margin-bottom: 0.5rem;">
+                            Click to browse or drag and drop files here
+                        </p>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">
+                            PDF files only, maximum 10 files
+                        </p>
+                    </div>
+
+                    <input type="file" id="cv_files" name="cv_files" class="file-input" accept=".pdf" multiple required>
+
+                    <div id="file-list" style="margin-top: 1rem;"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;" id="submit-btn">
+                    <i class="fas fa-spinner fa-spin" style="display: none;" id="loading-icon"></i>
+                    <span id="submit-text">Analyze CVs <i class="fas fa-arrow-right"></i></span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Info Card -->
+        <div class="card"
+            style="margin-top: 2rem; background: rgba(99, 102, 241, 0.05); border-color: var(--accent-primary);">
+            <h4 style="color: var(--accent-primary); margin-bottom: 1rem;">
+                <i class="fas fa-info-circle"></i> Processing Information
+            </h4>
+            <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                The system will perform the following analyses:
+            </p>
+            <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                <li>Text mining: Keyword extraction and evidence snippets</li>
+                <li>Data mining: Clustering and similarity ranking</li>
+                <li>Graph mining: Network analysis and centrality metrics</li>
+                <li>RAG preparation: Building searchable CV database</li>
+            </ul>
+            <p style="color: var(--text-muted); margin-top: 1rem; font-size: 0.9rem;">
+                ⏱️ Processing time varies based on number of CVs (typically 10-30 seconds)
+            </p>
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+    const fileInput = document.getElementById('cv_files');
+    const fileUploadArea = document.getElementById('file-upload-area');
+    const fileList = document.getElementById('file-list');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const loadingIcon = document.getElementById('loading-icon');
+    const uploadForm = document.getElementById('upload-form');
+
+    // Click to browse
+    fileUploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // File selection
+    fileInput.addEventListener('change', updateFileList);
+
+    // Drag and drop
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.add('dragover');
+    });
+
+    fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.classList.remove('dragover');
+    });
+
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+        fileInput.files = e.dataTransfer.files;
+        updateFileList();
+    });
+
+    function updateFileList() {
+        const files = fileInput.files;
+
+        if (files.length === 0) {
+            fileList.innerHTML = '';
+            return;
+        }
+
+        let html = '<div style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px;">';
+        html += `<p style="color: var(--text-primary); font-weight: 600; margin-bottom: 0.75rem;">Selected Files (${files.length}):</p>`;
+
+        for (let i = 0; i < Math.min(files.length, 10); i++) {
+            html += `<div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <i class="fas fa-file-pdf" style="color: var(--accent-primary);"></i>
+                <span style="color: var(--text-secondary);">${files[i].name}</span>
+            </div>`;
+        }
+
+        if (files.length > 10) {
+            html += `<p style="color: var(--accent-warning); margin-top: 0.5rem;">
+                <i class="fas fa-exclamation-triangle"></i> Only first 10 files will be processed
+            </p>`;
+        }
+
+        html += '</div>';
+        fileList.innerHTML = html;
+    }
+
+    // Form submission
+    uploadForm.addEventListener('submit', function () {
+        submitBtn.disabled = true;
+        submitText.innerHTML = '<span>Processing CVs...</span>';
+        loadingIcon.style.display = 'inline-block';
+    });
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends "portfolio_base.html" %}
+
+{% block title %}CV Demo - Step 1 - Hamza Abu Saleh{% endblock %}
+
+{% block extra_css %}
+<style>
+    .demo-container {
+        max-width: 700px;
+        margin: 2rem auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .form-input,
+    .form-textarea {
+        width: 100%;
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-family: var(--font-primary);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-textarea {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    .stepper {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .stepper::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--border-color);
+        z-index: -1;
+    }
+
+    .step {
+        background: var(--bg-card);
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        position: relative;
+    }
+
+    .step.active {
+        background: var(--gradient-primary);
+        border-color: var(--accent-primary);
+        color: white;
+    }
+
+    .step.completed {
+        background: var(--accent-success);
+        border-color: var(--accent-success);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container demo-container">
+        <a href="{{ url_for('cv_screening_demo') }}"
+            style="color: var(--text-muted); margin-bottom: 1rem; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Back to Demo Info
+        </a>
+
+        <h1 style="margin: 2rem 0 1rem;">Step 1: Enter Vacancy Details</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+            Provide the job title and description for the position you're recruiting for.
+        </p>
+
+        <!-- Stepper -->
+        <div class="stepper">
+            <div class="step active">1</div>
+            <div class="step">2</div>
+            <div class="step">3</div>
+        </div>
+
+        <!-- Form -->
+        <div class="card">
+            <form method="POST" action="{{ url_for('cv_demo_step1') }}">
+                <div class="form-group">
+                    <label class="form-label" for="job_title">
+                        <i class="fas fa-briefcase"></i> Job Title
+                    </label>
+                    <input type="text" id="job_title" name="job_title" class="form-input"
+                        placeholder="e.g., Senior Data Scientist" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="job_description">
+                        <i class="fas fa-file-alt"></i> Job Description
+                    </label>
+                    <textarea id="job_description" name="job_description" class="form-textarea"
+                        placeholder="Enter the full job description including required skills, qualifications, and responsibilities..."
+                        required></textarea>
+                    <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
+                        Tip: Include specific technical skills and requirements for better matching
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Continue to Upload CVs <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Help Card -->
+        <div class="card"
+            style="margin-top: 2rem; background: rgba(99, 102, 241, 0.05); border-color: var(--accent-primary);">
+            <h4 style="color: var(--accent-primary); margin-bottom: 1rem;">
+                <i class="fas fa-info-circle"></i> What happens next?
+            </h4>
+            <p style="color: var(--text-secondary);">
+                After entering the job details, you'll upload candidate CVs (PDF format).
+                The system will then analyze all CVs using text mining, clustering, graph analysis,
+                and provide comprehensive insights including candidate rankings and skill gaps.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

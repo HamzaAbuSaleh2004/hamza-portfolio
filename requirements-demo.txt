@@ -1,0 +1,15 @@
+# Lightweight Requirements for Demo Mode Deployment
+# Use this for Render/Railway when PORTFOLIO_DEMO_MODE=True
+# Much faster deployment (~1 min vs ~5 min)
+
+# Flask Web Framework
+Flask==3.0.0
+
+# Production WSGI Server
+gunicorn==21.2.0
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# That's it! Demo mode doesn't need ML libraries.
+# Total install size: ~50 MB (vs 1.5 GB with full requirements)

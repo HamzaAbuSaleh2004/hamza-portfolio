@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Step 2: Upload CVs - TechHire{% endblock %}
+
+{% block content %}
+<div class="upload-page">
+    <div class="steps-indicator">
+        <span class="step completed">Step 1: Vacancy</span>
+        <span class="arrow">→</span>
+        <span class="step active">Step 2: Upload CVs</span>
+        <span class="arrow">→</span>
+        <span class="step">Step 3: Results</span>
+    </div>
+
+    <h1>📄 Step 2: Upload Candidates</h1>
+    <p class="subtitle">For position: <strong>{{ vacancy_title }}</strong></p>
+
+    {% if cluster_label %}
+    <div class="cluster-info-banner">
+        <span class="icon">🏷️</span>
+        <span>Classified as: <strong>{{ cluster_label }}</strong></span>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="alert alert-error">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" class="upload-form">
+        <div class="form-section">
+            <div class="form-group">
+                <label for="cv_files">Select CV Files (PDF only, max 10 files) *</label>
+                <div class="file-drop-area">
+                    <input type="file" id="cv_files" name="cv_files" multiple accept=".pdf" required>
+                    <p>Drag & drop PDFs here or click to browse</p>
+                </div>
+                <small class="help-text">Each file will be processed as a separate candidate.</small>
+            </div>
+
+            <div id="file-list" class="file-list"></div>
+        </div>
+
+        <div class="form-actions space-between">
+            <a href="{{ url_for('step1') }}" class="btn btn-secondary">
+                ← Back
+            </a>
+            <button type="submit" class="btn btn-primary btn-large">
+                Analyze Candidates 🚀
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Display selected files
+    document.getElementById('cv_files').addEventListener('change', function (e) {
+        const fileList = document.getElementById('file-list');
+        const files = e.target.files;
+
+        if (files.length > 10) {
+            alert('Maximum 10 files allowed. Please select fewer files.');
+            e.target.value = '';
+            fileList.innerHTML = '';
+            return;
+        }
+
+        let html = '<h4>Selected Files (' + files.length + '):</h4><ul>';
+        for (let i = 0; i < files.length; i++) {
+            html += '<li>📄 ' + files[i].name + ' (' + (files[i].size / 1024).toFixed(1) + ' KB)</li>';
+        }
+        html += '</ul>';
+        fileList.innerHTML = html;
+    });
+</script>
+
+<style>
+    .steps-indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+        font-family: var(--font-heading);
+    }
+
+    .step {
+        padding: 0.5rem 1rem;
+        background: var(--bg-card);
+        border-radius: 20px;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .step.active {
+        background: var(--primary);
+        color: white;
+        font-weight: 600;
+    }
+
+    .step.completed {
+        background: var(--success);
+        color: white;
+    }
+
+    .arrow {
+        margin: 0 1rem;
+        color: var(--text-secondary);
+    }
+
+    .cluster-info-banner {
+        background: rgba(var(--primary-rgb), 0.1);
+        border: 1px solid var(--primary);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-primary);
+    }
+
+    .form-actions.space-between {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .file-drop-area {
+        border: 2px dashed var(--border);
+        border-radius: 8px;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        cursor: pointer;
+        transition: border-color 0.3s;
+    }
+
+    .file-drop-area:hover {
+        border-color: var(--primary);
+    }
+
+    .file-drop-area input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
