@@ -90,7 +90,7 @@ PERSONAL_INFO = {
         "degree": "Bachelor of Data Science & Artificial Intelligence",
         "institution": "Hussein Technical University (HTU)",
         "period": "2022 – 2026 (Expected)",
-        "gpa": "3.61 (Excellence)"
+        "gpa": "3.63 (Excellence)"
     },
     "experience": [
         {
