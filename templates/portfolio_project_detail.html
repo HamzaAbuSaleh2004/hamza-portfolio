@@ -77,7 +77,7 @@
             {% for screenshot in project.screenshots %}
             <div class="card" style="padding: 0; overflow: hidden;">
                 <img src="{{ url_for('static', filename='images/' + screenshot) }}" alt="{{ project.title }} screenshot"
-                    style="width: 100%; height: auto; display: block;">
+                    style="width: 100%; height: auto; display: block;" loading="lazy">
             </div>
             {% endfor %}
         </div>
