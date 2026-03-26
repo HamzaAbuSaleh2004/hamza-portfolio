@@ -21,7 +21,8 @@ Interactive, Modern, Professional Design
     --accent-secondary: #2d6a4f;
     --accent-tertiary: #52b788;
     --accent-success: #10b981;
-    --accent-warning: #dda15e; /* Amber accent */
+    --accent-warning: #dda15e;
+    /* Amber accent */
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, #40916c 0%, #1b4332 100%);
@@ -29,9 +30,12 @@ Interactive, Modern, Professional Design
     --gradient-success: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
 
     /* Text Colors */
-    --text-primary: #ffffff;      /* Pure white for headers */
-    --text-secondary: #f3f4f6;    /* Very light gray for main body text */
-    --text-muted: #d1d5db;        /* Light gray for sub-text/info */
+    --text-primary: #ffffff;
+    /* Pure white for headers */
+    --text-secondary: #f3f4f6;
+    /* Very light gray for main body text */
+    --text-muted: #d1d5db;
+    /* Light gray for sub-text/info */
 
     /* Borders & Shadows */
     --border-color: #2a2a3a;
@@ -79,9 +83,9 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        linear-gradient(45deg, rgba(255,255,255,0.015) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.015) 75%, rgba(255,255,255,0.015)), 
-        linear-gradient(-45deg, rgba(255,255,255,0.015) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.015) 75%, rgba(255,255,255,0.015));
+    background:
+        linear-gradient(45deg, rgba(255, 255, 255, 0.015) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.015) 75%, rgba(255, 255, 255, 0.015)),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.015) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.015) 75%, rgba(255, 255, 255, 0.015));
     background-size: 40px 40px;
     background-color: var(--bg-primary);
     pointer-events: none;
@@ -166,13 +170,11 @@ a:hover {
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: 800;
-    background: linear-gradient(
-        to right, 
-        var(--accent-primary) 20%, 
-        var(--accent-tertiary) 40%, 
-        var(--accent-tertiary) 60%, 
-        var(--accent-primary) 80%
-    );
+    background: linear-gradient(to right,
+            var(--accent-primary) 20%,
+            var(--accent-tertiary) 40%,
+            var(--accent-tertiary) 60%,
+            var(--accent-primary) 80%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -324,22 +326,21 @@ a:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(
-        800px circle at var(--mouse-x, 0) var(--mouse-y, 0), 
-        rgba(64, 145, 108, 0.08),
-        transparent 40%
-    );
+    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+            rgba(64, 145, 108, 0.08),
+            transparent 40%);
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
     z-index: 0;
     border-radius: inherit;
 }
+
 .card:hover::after {
     opacity: 1;
 }
 
-.card > * {
+.card>* {
     position: relative;
     z-index: 1;
 }
@@ -479,7 +480,7 @@ a:hover {
     object-fit: cover;
     object-position: center top;
     display: block;
-    
+
     /* Geometric Mask for the image */
     -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
@@ -767,7 +768,8 @@ a:hover {
         height: auto;
     }
 
-    h1, .hero h1 {
+    h1,
+    .hero h1 {
         font-size: 2.2rem;
     }
 

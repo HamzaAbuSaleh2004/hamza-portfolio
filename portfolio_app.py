@@ -150,6 +150,13 @@ PERSONAL_INFO = {
 }
 
 
+@app.route('/googleee285dd89ce1ffed.html')
+def google_verification():
+    """Google Search Console verification file"""
+    return "google-site-verification: googleee285dd89ce1ffed.html"
+
+
+
 # ==================== PORTFOLIO ROUTES ====================
 
 @app.route('/')
