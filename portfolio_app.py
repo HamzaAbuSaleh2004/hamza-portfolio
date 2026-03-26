@@ -159,13 +159,17 @@ def google_verification():
 @app.route('/sitemap.xml')
 def sitemap():
     """Sitemap for search engines"""
-    return send_from_directory(os.getcwd(), 'sitemap.xml')
+    response = send_from_directory(os.getcwd(), 'sitemap.xml')
+    response.headers['Content-Type'] = 'application/xml'
+    return response
 
 
 @app.route('/robots.txt')
 def robots():
     """Robots.txt for search engines"""
-    return send_from_directory(os.getcwd(), 'robots.txt')
+    response = send_from_directory(os.getcwd(), 'robots.txt')
+    response.headers['Content-Type'] = 'text/plain'
+    return response
 
 
 
