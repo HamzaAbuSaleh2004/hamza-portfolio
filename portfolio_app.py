@@ -98,7 +98,10 @@ PERSONAL_INFO = {
             "organization": "LiverX",
             "period": "2026",
             "responsibilities": [
-                "Successfully completed intensive onboarding and specialized training on the Google Cloud Platform (GCP) console.<br><br><div data-iframe-width='150' data-iframe-height='270' data-share-badge-id='c818b3f9-1fc8-43eb-a36a-d945ce79814b' data-share-badge-host='https://www.credly.com'></div><script type='text/javascript' async src='//cdn.credly.com/assets/utilities/embed.js'></script>"
+                "Successfully completed intensive onboarding and specialized training on the Google Cloud Platform (GCP) console.<br><br><div data-iframe-width='150' data-iframe-height='270' data-share-badge-id='c818b3f9-1fc8-43eb-a36a-d945ce79814b' data-share-badge-host='https://www.credly.com'></div><script type='text/javascript' async src='//cdn.credly.com/assets/utilities/embed.js'></script>",
+                "<strong>Cloud Infrastructure:</strong> Completed deep-dive training on Google Cloud Platform (GCP), covering services like Cloud Run, App Engine, and VPC networking.",
+                "<strong>Agentic AI Development:</strong> Training in the ADK (Agent Development Kit) department to build Sequential, Parallel, and Loop AI architectures.",
+                "<strong>Performance & Support:</strong> Earned top rankings in internal assessments and presentations while assisting the team in refining customer-facing technical materials."
             ]
         },
         {

@@ -29,9 +29,9 @@ Interactive, Modern, Professional Design
     --gradient-success: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
 
     /* Text Colors */
-    --text-primary: #f8f9fa;
-    --text-secondary: #d1d5db;
-    --text-muted: #9ca3af;
+    --text-primary: #ffffff;      /* Pure white for headers */
+    --text-secondary: #f3f4f6;    /* Very light gray for main body text */
+    --text-muted: #d1d5db;        /* Light gray for sub-text/info */
 
     /* Borders & Shadows */
     --border-color: #2a2a3a;
@@ -166,10 +166,32 @@ a:hover {
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: 800;
-    background: var(--gradient-primary);
+    background: linear-gradient(
+        to right, 
+        var(--accent-primary) 20%, 
+        var(--accent-tertiary) 40%, 
+        var(--accent-tertiary) 60%, 
+        var(--accent-primary) 80%
+    );
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
+    padding: 0.2rem 0;
+    animation: shimmer 4s linear infinite;
+    text-shadow: 0 0 10px rgba(64, 145, 108, 0.2);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    filter: drop-shadow(0 0 8px var(--accent-primary));
+    transform: scale(1.02);
+}
+
+/* Shimmer animation for navbar-brand */
+@keyframes shimmer {
+    to {
+        background-position: 200% center;
+    }
 }
 
 .nav-links {
@@ -350,16 +372,42 @@ a:hover {
 }
 
 .contact-icon {
-    width: 60px;
-    height: 60px;
-    background: transparent;
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.05);
     color: var(--accent-primary);
-    border-radius: 50%;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin: 0 auto 1.5rem;
+    border: 1px solid rgba(64, 145, 108, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.contact-item:hover .contact-icon {
+    transform: translateY(-10px) rotate(8deg);
+    color: white;
+    border-color: var(--accent-primary);
+    box-shadow: 0 15px 30px rgba(64, 145, 108, 0.4);
+}
+
+.contact-item:hover .contact-icon::before {
+    opacity: 1;
 }
 
 .badge-primary {
