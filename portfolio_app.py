@@ -2,7 +2,7 @@
 Interactive Flask Portfolio Website for Hamza Abu Saleh
 Features: Personal info pages, project showcase, CV screening demo
 """
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
 import os
 import sys
 from projects_data import get_all_projects, get_project, get_projects_by_category, get_featured_projects
@@ -154,6 +154,18 @@ PERSONAL_INFO = {
 def google_verification():
     """Google Search Console verification file"""
     return "google-site-verification: googleee285dd89ce1ffed.html"
+
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """Sitemap for search engines"""
+    return send_from_directory(os.getcwd(), 'sitemap.xml')
+
+
+@app.route('/robots.txt')
+def robots():
+    """Robots.txt for search engines"""
+    return send_from_directory(os.getcwd(), 'robots.txt')
 
 
 

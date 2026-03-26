@@ -5,11 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="{% block meta_description %}Hamza Abu Saleh - Aspiring Data Scientist specializing in AI, Machine Learning, and NLP{% endblock %}">
-    <meta name="keywords" content="Data Science, AI, Machine Learning, NLP, Computer Vision, Flask, Python">
+        content="{% block meta_description %}Hamza Abu Saleh is an AI Engineer and Data Scientist specializing in AI, Machine Learning, and NLP. Explore his portfolio of advanced AI solutions.{% endblock %}">
+    <meta name="keywords" content="Hamza Abu Saleh, AI Engineer, Data Scientist, Machine Learning, NLP, Computer Vision, Portfolio, HTU">
     <meta name="author" content="Hamza Abu Saleh">
 
-    <title>{% block title %}Hamza Abu Saleh - Data Science Portfolio{% endblock %}</title>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hamza-portfolio-rk8n.onrender.com/">
+    <meta property="og:title" content="Hamza Abu Saleh | AI Engineer - Portfolio">
+    <meta property="og:description" content="AI Engineer and Data Scientist specializing in Machine Learning and NLP. View projects and experience.">
+    <meta property="og:image" content="{{ url_for('static', filename='images/newprofileimage.jpg', _external=True) }}">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Hamza Abu Saleh",
+      "jobTitle": "AI Engineer",
+      "url": "https://hamza-portfolio-rk8n.onrender.com/",
+      "sameAs": [
+        "https://www.linkedin.com/in/hamza-abu-saleh-3a9a1b1b1/"
+      ],
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Hussein Technical University"
+      }
+    }
+    </script>
+
+    <title>{% block title %}Hamza Abu Saleh | AI Engineer - Data Science Portfolio{% endblock %}</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio.css') }}">

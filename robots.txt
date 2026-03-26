@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hamza-portfolio-rk8n.onrender.com/sitemap.xml
