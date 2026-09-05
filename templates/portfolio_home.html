@@ -1,228 +1,282 @@
 {% extends "portfolio_base.html" %}
 
-{% block title %}Hamza Abu Saleh - Data Science & AI Portfolio{% endblock %}
+{% block title %}Hamza Abu Saleh — AI Engineer{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section id="home" class="hero" style="position: relative; overflow: hidden; padding: 8rem 0;">
-    <div class="container" style="position: relative; z-index: 2;">
-        <!-- Visually Hidden H1 for SEO (No visual change) -->
-        <h1 class="sr-only">Hamza Abu Saleh | AI Engineer & Data Scientist Portfolio</h1>
-        <div class="hero-layout">
-            <!-- Text Content -->
-            <div class="hero-content">
-                <h1>Engineering <span class="gradient-text">Elegance</span>.<br>Designing Logic.</h1>
-                <p style="font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 2rem;">
-                    Hi, I'm <strong>Hamza Abu Saleh</strong>. <br>
-                    Crafting digital experiences with precision and purpose. <br>
-                    <span style="font-size: 1rem;">{{ personal.headline }}</span>
-                </p>
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="home">
+    <div class="hero-video-wrap">
+        <video id="hero-video" class="hero-video" autoplay muted loop playsinline preload="auto"
+            poster="{{ url_for('static', filename='media/hero-poster.jpg') }}">
+            <source src="{{ url_for('static', filename='media/hero-1080.mp4') }}" type="video/mp4" media="(min-width: 900px)">
+            <source src="{{ url_for('static', filename='media/hero-720.mp4') }}" type="video/mp4">
+        </video>
+    </div>
 
-                <div class="hero-cta">
-                    <a href="{{ url_for('projects') }}" class="btn btn-primary">View My Projects</a>
-                    <a href="#contact" class="btn btn-outline">Get in Touch</a>
-                </div>
+    <h1 class="sr-only">Hamza Abu Saleh — AI Engineer &amp; Cloud AI Engineer</h1>
+
+    <!-- top corners -->
+    <div class="hero-top">
+        <div class="wrap">
+            <div class="hero-meta">
+                Based in <span class="accent">Amman, Jordan</span><br>
+                Portfolio — Vol. 03
             </div>
-
-            <!-- Profile Photo -->
-            <div class="hero-image-wrapper">
-                <img src="{{ url_for('static', filename='images/newprofileimage.jpg') }}"
-                    alt="Hamza Abu Saleh - Data Scientist" class="hero-image" />
+            <div class="hero-meta" style="text-align:right;">
+                AI Engineer<br>
+                MMXXVI
             </div>
         </div>
     </div>
-</section>
 
-<!-- About Section (Education & Experience) -->
-<section id="about" class="section" style="background: var(--bg-secondary);">
-    <div class="container">
-        <div class="section-title">
-            <h2>About & Journey</h2>
-            <p>{{ personal.objective }}</p>
+    <div class="wrap">
+        <div class="hero-title" aria-hidden="true">
+            <span class="line line-1"><span style="--d:.15s">Hamza</span></span>
+            <span class="line line-2"><span style="--d:.28s">Abu&nbsp;Saleh</span></span>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr; gap: 4rem; max-width: 900px; margin: 0 auto;">
-            <!-- Education -->
-            <div class="fade-in-up">
-                <h3 style="margin-bottom: 1.5rem; color: var(--accent-primary);"><i class="fas fa-graduation-cap"></i>
-                    Education</h3>
-                <div class="card card-glass">
-                    <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap;">
-                        <div>
-                            <h4 style="margin-bottom: 0.5rem; color: var(--text-primary);">{{ personal.education.degree
-                                }}</h4>
-                            <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 0.5rem;">{{
-                                personal.education.institution }}</p>
-                            <p style="color: var(--text-muted);">{{ personal.education.period }}</p>
-                        </div>
-                        <div style="text-align: right; margin-top: 0.5rem;">
-                            <span class="badge badge-gradient" style="font-size: 1rem; padding: 0.5rem 1rem;">
-                                GPA: {{ personal.education.gpa }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Experience -->
+        <div class="hero-bottom">
             <div>
-                <h3 style="margin-bottom: 1.5rem; color: var(--accent-secondary);"><i class="fas fa-briefcase"></i>
-                    Experience</h3>
-                <div class="timeline">
-                    {% for exp in personal.experience %}
-                    <div class="timeline-item fade-in-up">
-                        <h4>{{ exp.title }}</h4>
-                        <p style="color: var(--text-primary); font-weight: 600; margin-bottom: 0.5rem;">{{
-                            exp.organization }}</p>
-                        <p class="period">{{ exp.period }}</p>
-                        <ul style="list-style-position: inside; color: var(--text-secondary);">
-                            {% for responsibility in exp.responsibilities %}
-                            <li style="margin-bottom: 0.5rem;">{{ responsibility|safe }}</li>
-                            {% endfor %}
-                        </ul>
+                <div class="hero-roles">
+                    <span class="prompt">&gt;</span>
+                    <span class="role-text" id="role-rotator"
+                        data-roles='{{ personal.roles|tojson }}'>AI Engineer</span>
+                    <span class="caret"></span>
+                </div>
+                <p class="hero-sub" style="margin-top:1rem;">{{ personal.headline }}</p>
+            </div>
+            <div class="hero-cta">
+                <a href="{{ url_for('projects') }}" class="btn btn-accent" data-magnetic>View work <span class="arrow">↗</span></a>
+                <a href="#contact" class="btn" data-magnetic>Get in touch</a>
+            </div>
+        </div>
+    </div>
+
+    <button class="scroll-cue" aria-label="Scroll down">
+        <span>Scroll</span>
+        <span class="bar"></span>
+    </button>
+
+    <div class="hero-autoscroll" id="hero-autoscroll" aria-hidden="true">
+        <span>Auto <span class="sec">10</span>s</span>
+        <svg viewBox="0 0 32 32">
+            <circle class="track" cx="16" cy="16" r="14"></circle>
+            <circle class="ring" cx="16" cy="16" r="14"></circle>
+        </svg>
+    </div>
+</section>
+
+<!-- ==================== MARQUEE ==================== -->
+<div class="marquee" id="after-hero" aria-hidden="true">
+    <div class="marquee-track" data-marquee>
+        <span class="marquee-item">AI Engineering <span class="sep">✦</span></span>
+        <span class="marquee-item ghost">Multi-Agent Systems <span class="sep">✦</span></span>
+        <span class="marquee-item">Computer Vision <span class="sep">✦</span></span>
+        <span class="marquee-item ghost">Google Cloud <span class="sep">✦</span></span>
+        <span class="marquee-item">NLP <span class="sep">✦</span></span>
+    </div>
+</div>
+
+<!-- ==================== ABOUT ==================== -->
+<section class="section" id="about">
+    <div class="wrap">
+        <div class="section-head" data-reveal>
+            <div>
+                <span class="eyebrow">02 — About</span>
+                <h2>The person<br>behind the systems</h2>
+            </div>
+            <p class="head-note">A Data Science &amp; AI student turning research-driven engineering into shipped, high-impact products.</p>
+        </div>
+
+        <div class="about-grid">
+            <p class="about-lead" data-reveal>
+                I build <span class="accent">production AI systems</span> — from hierarchical multi-agent
+                orchestration on Google Cloud to computer-vision and NLP pipelines.
+                <span class="muted">Currently a Cloud AI Engineer at LiverX and Co-Founder of Madmoon, shipping
+                client-facing solutions across the MENA region.</span>
+            </p>
+
+            <div class="about-side" data-reveal style="--rd:.1s;">
+                <p>{{ personal.objective }}</p>
+                <div class="edu-card">
+                    <h4>{{ personal.education.degree }}</h4>
+                    <p class="inst">{{ personal.education.institution }}</p>
+                    <div class="meta">
+                        <span class="period">{{ personal.education.period }}</span>
+                        <span class="gpa-chip">GPA {{ personal.education.gpa }}</span>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Featured Projects Section -->
-<section id="featured-projects" class="section">
-    <div class="container">
-        <div class="section-title">
-            <h2>Featured Projects</h2>
-            <p>Showcasing advanced AI, ML, and NLP implementations</p>
+<!-- ==================== METRICS ==================== -->
+<div class="metrics">
+    {% for m in personal.metrics %}
+    <div class="metric" data-reveal style="--rd: {{ loop.index0 * 0.08 }}s;">
+        <div class="metric-value">
+            <span data-count="{{ m.value }}" data-decimals="{{ m.decimals }}">0</span><span class="unit">{{ m.unit }}</span>
         </div>
-
-        <div class="projects-grid">
-            {% for project_id, project in featured_projects.items() %}
-            <div class="card project-card fade-in-up">
-                <div class="project-card-header">
-                    <span class="project-category">{{ project.category }}</span>
-                    <h3>{{ project.title }}</h3>
-                    <p>{{ project.one_liner }}</p>
-                </div>
-
-                <div class="tech-stack">
-                    {% for tech in project.tech_stack[:5] %}
-                    <span class="badge badge-primary">{{ tech }}</span>
-                    {% endfor %}
-                    {% if project.tech_stack|length > 5 %}
-                    <span class="badge">+{{ project.tech_stack|length - 5 }} more</span>
-                    {% endif %}
-                </div>
-
-                <div class="project-card-footer">
-                    <a href="{{ url_for('project_detail', project_id=project.id) }}" class="btn btn-secondary"
-                        style="width: 100%; margin-top: 1rem;">
-                        View Details <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        <div style="text-align: center; margin-top: 2rem;">
-            <a href="{{ url_for('projects') }}" class="btn btn-primary">View All Projects</a>
-        </div>
+        <div class="metric-label">{{ m.label }}</div>
     </div>
-</section>
+    {% endfor %}
+</div>
 
-<!-- Skills Highlight Section -->
-<section class="section" style="background: var(--bg-secondary);">
-    <div class="container">
-        <div class="section-title">
-            <h2>Skills & Expertise</h2>
-            <p>Technical and soft skills developed through academic and practical projects</p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-            <!-- Technical Skills -->
-            <div class="card card-glass fade-in-up">
-                <h3><i class="fas fa-code" style="color: var(--accent-primary); margin-right: 0.5rem;"></i> Technical
-                    Skills</h3>
-                <div class="tech-stack" style="margin-top: 1.5rem;">
-                    {% for skill in personal.skills.technical %}
-                    <span class="badge">{{ skill }}</span>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Soft Skills -->
-            <div class="card card-glass fade-in-up">
-                <h3><i class="fas fa-users" style="color: var(--accent-secondary); margin-right: 0.5rem;"></i> Soft
-                    Skills</h3>
-                <div class="tech-stack" style="margin-top: 1.5rem;">
-                    {% for skill in personal.skills.soft %}
-                    <span class="badge">{{ skill }}</span>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Achievements Section -->
+<!-- ==================== EXPERIENCE ==================== -->
 <section class="section">
-    <div class="container">
-        <div class="section-title">
-            <h2>Notable Achievements</h2>
+    <div class="wrap">
+        <div class="section-head" data-reveal>
+            <div>
+                <span class="eyebrow">Experience</span>
+                <h2>Where I've<br>been building</h2>
+            </div>
+            <p class="head-note">Cloud AI engineering, fintech, and global innovation leadership.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-            {% for achievement in personal.achievements %}
-            <div class="card fade-in-up" style="text-align: center;">
-                <i class="fas fa-trophy"
-                    style="font-size: 2rem; color: var(--accent-primary); margin-bottom: 1rem;"></i>
-                <p style="color: var(--text-primary);">{{ achievement }}</p>
+        <div class="timeline">
+            {% for exp in personal.experience %}
+            <div class="timeline-item" data-reveal>
+                <div class="period">{{ exp.period }}</div>
+                <div>
+                    <h4>{{ exp.title }}</h4>
+                    <div class="org">{{ exp.organization }}</div>
+                    <ul>
+                        {% for r in exp.responsibilities %}
+                        <li>{{ r|safe }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
             {% endfor %}
         </div>
     </div>
 </section>
 
-<!-- Contact Section -->
-<section id="contact" class="section" style="background: var(--gradient-primary); padding: 5rem 0;">
-    <div class="container">
-        <div class="section-title" style="color: white; margin-bottom: 3rem;">
-            <h2 style="color: white; -webkit-text-fill-color: white;">Get In Touch</h2>
-            <p style="color: rgba(255,255,255,0.9);">Let's connect and discuss opportunities, collaborations, or
-                projects</p>
+<!-- ==================== FEATURED WORK ==================== -->
+<section class="section section-hair">
+    <div class="wrap">
+        <div class="section-head" data-reveal>
+            <div>
+                <span class="eyebrow">03 — Selected work</span>
+                <h2>Featured<br>projects</h2>
+            </div>
+            <p class="head-note">A few production and research systems. <a href="{{ url_for('projects') }}" class="accent">See all →</a></p>
         </div>
 
-        <div class="contact-info fade-in-up">
-            <!-- Email -->
-            <div class="card card-glass contact-item">
-                <div class="contact-icon">
-                    <i class="fas fa-envelope"></i>
+        <div class="index-list">
+            {% for project_id, project in featured_projects.items() %}
+            <a class="index-row" href="{{ url_for('project_detail', project_id=project.id) }}"
+                data-category="{{ project.category }}" data-tags="{{ project.tags|join(',') }}"
+                data-preview-label="{{ project.category }} · {{ project.year }}"
+                {% if project.screenshots %}data-preview="{{ url_for('static', filename='images/' + project.screenshots[0]) }}"{% endif %}
+                data-reveal style="--rd: {{ loop.index0 * 0.06 }}s;">
+                <span class="index-num">{{ '%02d' % loop.index }}</span>
+                <div class="index-main">
+                    <div class="index-title">{{ project.title }}</div>
+                    <p class="index-sub">{{ project.one_liner }}</p>
+                    <div class="index-tags">
+                        {% for tag in project.tags %}<span class="index-tag">{{ tag }}</span>{% endfor %}
+                    </div>
                 </div>
-                <h3 style="color: white; -webkit-text-fill-color: white;">Email</h3>
-                <a href="mailto:{{ personal.email }}"
-                    style="font-size: 1.05rem; color: white; overflow-wrap: anywhere;">{{ personal.email }}</a>
-            </div>
-
-            <!-- Phone -->
-            <div class="card card-glass contact-item">
-                <div class="contact-icon">
-                    <i class="fas fa-phone"></i>
+                <div class="index-meta">
+                    <span class="index-cat">{{ project.category }} — {{ project.year }}</span>
+                    <span class="index-arrow">↗</span>
                 </div>
-                <h3 style="color: white;">Phone</h3>
-                <a href="tel:{{ personal.phone }}" style="font-size: 1.05rem; color: white;">{{ personal.phone }}</a>
-            </div>
-
-            <!-- LinkedIn -->
-            <div class="card card-glass contact-item">
-                <div class="contact-icon">
-                    <i class="fab fa-linkedin"></i>
-                </div>
-                <h3 style="color: white;">LinkedIn</h3>
-                <a href="{{ personal.linkedin }}" target="_blank" style="font-size: 1.05rem; color: white;">Connect</a>
-            </div>
-
-
+            </a>
+            {% endfor %}
         </div>
     </div>
 </section>
+
+<!-- ==================== SKILLS ==================== -->
+<section class="section">
+    <div class="wrap">
+        <div class="section-head" data-reveal>
+            <div>
+                <span class="eyebrow">Stack</span>
+                <h2>Tools &amp;<br>technologies</h2>
+            </div>
+            <p class="head-note">The stack behind the work — from model training to cloud deployment.</p>
+        </div>
+    </div>
+    <div class="marquee pill-marquee" data-reveal>
+        <div class="marquee-track" data-marquee>
+            {% for skill in personal.skills.technical %}<span class="skill-pill">{{ skill }}</span>{% endfor %}
+        </div>
+    </div>
+    <div class="marquee pill-marquee reverse" style="border-top:none;" data-reveal>
+        <div class="marquee-track" data-marquee>
+            {% for skill in personal.skills.soft %}<span class="skill-pill">{{ skill }}</span>{% endfor %}
+            {% for skill in personal.skills.technical[:8] %}<span class="skill-pill">{{ skill }}</span>{% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CERTIFICATIONS ==================== -->
+<section class="section section-hair cert-section" id="certs">
+    <div class="wrap">
+        <div class="section-head" data-reveal>
+            <div>
+                <span class="eyebrow">04 — Credentials</span>
+                <h2>Google Cloud<br>certifications</h2>
+            </div>
+            <p class="head-note">Digital Leader certified, with Google Cloud skill badges — verified on Credly.</p>
+        </div>
+
+        <div class="cert-grid" data-reveal>
+            {% for cert in certifications %}
+            <div class="cert-card {% if loop.first %}featured{% endif %}">
+                <div class="cert-embed">
+                    <div data-iframe-width="150" data-iframe-height="270"
+                        data-share-badge-id="{{ cert.badge_id }}"
+                        data-share-badge-host="https://www.credly.com"></div>
+                </div>
+                <span class="cert-caption">{{ cert.label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <p class="cert-note">Badges load live from <a href="https://www.credly.com/users/hamza-abu-saleh" target="_blank" rel="noopener">Credly</a>.</p>
+    </div>
+</section>
+
+<!-- ==================== ACHIEVEMENTS ==================== -->
+<section class="section">
+    <div class="wrap">
+        <div class="section-head" data-reveal>
+            <div>
+                <span class="eyebrow">Recognition</span>
+                <h2>Notable<br>achievements</h2>
+            </div>
+        </div>
+        <div class="ach-list">
+            {% for a in personal.achievements %}
+            <div class="ach-item" data-reveal style="--rd: {{ loop.index0 * 0.08 }}s;">
+                <span class="star">0{{ loop.index }} ✦</span>
+                <p>{{ a }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section class="section section-hair contact" id="contact">
+    <div class="wrap">
+        <span class="eyebrow center" data-reveal>Contact</span>
+        <div class="contact-huge" data-reveal>
+            <a href="mailto:{{ personal.email }}" data-magnetic>Let's<br>work together</a>
+        </div>
+        <div class="contact-links" data-reveal>
+            <a href="mailto:{{ personal.email }}"><span class="label">Email —</span> {{ personal.email }}</a>
+            <a href="{{ personal.linkedin }}" target="_blank" rel="noopener"><span class="label">LinkedIn —</span> Connect ↗</a>
+            <a href="tel:{{ personal.phone }}"><span class="label">Phone —</span> {{ personal.phone }}</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Credly badge embeds -->
+<script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
 {% endblock %}

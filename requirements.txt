@@ -1,24 +1,2 @@
-# Flask Web Framework
-Flask==3.0.0
-
-# Production WSGI Server
-gunicorn==21.2.0
-
-# Core ML/Data Processing (REQUIRED for CV screening)
-numpy
-scikit-learn
-PyPDF2
-
-# Graph Mining (REQUIRED for CV screening)
-networkx
-matplotlib
-
-# RAG Chatbot (REQUIRED for CV screening)
-sentence-transformers
-faiss-cpu
-
-# Google Gemini AI (REQUIRED for CV screening in live mode)
-google-generativeai
-
-# Environment Variables
-python-dotenv
+Flask==3.0.3
+gunicorn==22.0.0

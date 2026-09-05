@@ -5,89 +5,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="{% block meta_description %}Hamza Abu Saleh is an AI Engineer and Data Scientist specializing in AI, Machine Learning, and NLP. Explore his portfolio of advanced AI solutions.{% endblock %}">
-    <meta name="keywords" content="Hamza Abu Saleh, AI Engineer, Data Scientist, Machine Learning, NLP, Computer Vision, Portfolio, HTU">
+        content="{% block meta_description %}Hamza Abu Saleh — AI Engineer & Cloud AI Engineer building production multi-agent systems, computer vision, and GCP deployments.{% endblock %}">
+    <meta name="keywords" content="Hamza Abu Saleh, AI Engineer, Cloud AI Engineer, Multi-Agent Systems, Google ADK, Computer Vision, NLP, Data Scientist, HTU, Portfolio">
     <meta name="author" content="Hamza Abu Saleh">
+    <meta name="theme-color" content="#08080a">
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://hamza-portfolio-rk8n.onrender.com/">
-    <meta property="og:title" content="Hamza Abu Saleh | AI Engineer - Portfolio">
-    <meta property="og:description" content="AI Engineer and Data Scientist specializing in Machine Learning and NLP. View projects and experience.">
+    <meta property="og:title" content="Hamza Abu Saleh — AI Engineer">
+    <meta property="og:description" content="Cloud AI Engineer building production multi-agent systems on Google Cloud. Computer vision, NLP, and intelligent systems.">
     <meta property="og:image" content="{{ url_for('static', filename='images/newprofileimage.jpg', _external=True) }}">
 
-    <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Hamza Abu Saleh",
       "jobTitle": "AI Engineer",
-      "url": "https://hamza-portfolio-rk8n.onrender.com/",
-      "sameAs": [
-        "https://www.linkedin.com/in/hamza-abu-saleh-3a9a1b1b1/"
-      ],
-      "alumniOf": {
-        "@type": "CollegeOrUniversity",
-        "name": "Hussein Technical University"
-      }
+      "sameAs": ["{{ personal.linkedin }}"],
+      "alumniOf": { "@type": "CollegeOrUniversity", "name": "Hussein Technical University" }
     }
     </script>
 
-    <title>{% block title %}Hamza Abu Saleh | AI Engineer - Data Science Portfolio{% endblock %}</title>
+    <title>{% block title %}Hamza Abu Saleh — AI Engineer{% endblock %}</title>
 
-    <!-- CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio.css') }}">
-
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     {% block extra_css %}{% endblock %}
 </head>
 
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="{{ url_for('home') }}" class="navbar-brand">Hamza Abu Saleh</a>
+<body class="is-loading">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+        <div class="preloader-name"><span>Hamza Abu Saleh</span></div>
+        <div class="preloader-bar"></div>
+        <div class="preloader-count">000</div>
+    </div>
 
-            <button class="menu-toggle" aria-label="Toggle menu">
-                <i class="fas fa-bars"></i>
+    <!-- Scroll progress -->
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="wrap">
+            <a href="{{ url_for('home') }}" class="brand"><span class="dot"></span> Hamza<span class="accent">.</span></a>
+
+            <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
             </button>
 
             <ul class="nav-links">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('home') }}#about">About</a></li>
-                <li><a href="{{ url_for('projects') }}">Projects</a></li>
-                <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
+                <li><a href="{{ url_for('home') }}"><span class="idx">01</span> Home</a></li>
+                <li><a href="{{ url_for('home') }}#about"><span class="idx">02</span> About</a></li>
+                <li><a href="{{ url_for('projects') }}"><span class="idx">03</span> Work</a></li>
+                <li><a href="{{ url_for('home') }}#certs"><span class="idx">04</span> Certs</a></li>
+                <li class="nav-cta"><a href="{{ url_for('home') }}#contact" class="btn btn-accent" data-magnetic>Get in touch <span class="arrow">↗</span></a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 Hamza Abu Saleh. All rights reserved.</p>
-            <p>Data Science & AI Student at HTU | Amman, Jordan</p>
-            <div style="margin-top: 1rem;">
-                <a href="{{ personal.linkedin }}" target="_blank" style="margin: 0 0.5rem; font-size: 1.5rem;">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="mailto:{{ personal.email }}" style="margin: 0 0.5rem; font-size: 1.5rem;">
-                    <i class="fas fa-envelope"></i>
-                </a>
+        <div class="wrap">
+            <div>
+                <div class="f-brand">Hamza Abu Saleh</div>
+                <p class="f-note">AI Engineer · Amman, Jordan · &copy; 2026</p>
+            </div>
+            <div class="f-social">
+                <a href="{{ personal.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="mailto:{{ personal.email }}" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                <a href="{{ url_for('download_cv') }}" target="_blank" rel="noopener" aria-label="Download CV"><i class="fas fa-file-arrow-down"></i></a>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
-
     {% block extra_js %}{% endblock %}
 </body>
 

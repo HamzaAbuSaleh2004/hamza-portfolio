@@ -3,62 +3,46 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
 
-# Virtual Environment
+# Virtual environments
+.venv/
 venv/
 ENV/
 env/
-.venv
+myenv/
 
-# Environment Variables
+# Environment / secrets
 .env
 .env.local
+*api_key*
+*secret*
+!.env.example
 
-# IDE
+# IDE / OS
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+Thumbs.db
+Desktop.ini
 
 # Flask
 instance/
 .webassets-cache
 *.log
 
-# Upload folder (contains user-uploaded PDFs in live mode)
+# Uploads
 uploads/
+
+# PDFs are ignored by default, but the CV is served by the /cv route
 *.pdf
+!Hamza_Abu_Saleh_CV.pdf
 
-# Data files (ML models)
-Data/*.pkl
-models/*.pkl
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# OS
-Thumbs.db
-Desktop.ini
-
-# API Keys (double check)
-*api_key*
-*secret*
-!.env.example
+# Source media — the hero was re-encoded into static/media/ (1080p + 720p + poster).
+# These originals are far too large for GitHub and are not served by the app.
+Hero-section-gif.gif
+Hero-section-video.mp4
+*.docx
