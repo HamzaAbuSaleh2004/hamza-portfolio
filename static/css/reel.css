@@ -1,0 +1,498 @@
+/* ==========================================================================
+   Work Showcase — /work-showcase
+   Uses the tokens declared in portfolio.css (:root).
+
+   Layout goal: the showreel and both walkthroughs visible in ONE viewport.
+   The theatre's width is driven by the stage height, so the two cells beneath
+   always add up to the same width as the stage above them.
+   ========================================================================== */
+
+/* scroll stoppers — proximity, not mandatory, so the long text below stays readable.
+   Scoped to this page because reel.css is only loaded here. */
+html {
+    scroll-snap-type: y proximity;
+    scroll-behavior: smooth;
+}
+
+.reel-hero    { scroll-snap-align: start; }
+/* start, not center: the theatre is exactly one viewport tall, so aligning its
+   top fills the frame precisely. 'center' landed 38px short and clipped the
+   bottom row. */
+.reel-theatre { scroll-snap-align: start; }
+.reel-demos,
+.reel-cta     { scroll-snap-align: start; }
+
+/* ---------- title panel ---------- */
+.reel-hero {
+    position: relative;
+    min-height: 88svh;
+    display: flex;
+    align-items: center;
+    padding: calc(var(--nav-h) + 2rem) 0 2.5rem;
+}
+
+.reel-hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(1100px, 90vw);
+    height: 620px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at 50% 0%, var(--accent-glow), transparent 68%);
+    opacity: 0.5;
+    pointer-events: none;
+    filter: blur(40px);
+}
+
+.reel-hero > .wrap { position: relative; z-index: 1; }
+
+.reel-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--line-2);
+    border-radius: 100px;
+    background: var(--bg-2);
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.68rem;
+}
+
+.reel-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: reel-pulse 2.4s var(--ease) infinite;
+}
+
+@keyframes reel-pulse {
+    0%   { box-shadow: 0 0 0 0 var(--accent-glow); }
+    70%  { box-shadow: 0 0 0 9px rgba(205, 242, 78, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(205, 242, 78, 0); }
+}
+
+.reel-title {
+    font-size: clamp(2.9rem, 9.5vw, 7.4rem);
+    margin: 1.4rem 0 0;
+}
+
+.reel-lead {
+    max-width: 62ch;
+    margin-top: 1.6rem;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--text-2);
+}
+
+.reel-herofoot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-top: clamp(1.6rem, 4vw, 2.6rem);
+}
+
+.reel-metaline {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.7rem;
+}
+
+.reel-metaline .sep { color: var(--text-4); }
+
+/* ---------- "plays in 5s" countdown ---------- */
+.reel-autocue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.5rem 0.45rem 0.95rem;
+    border: 1px solid var(--line-2);
+    border-radius: 100px;
+    background: var(--bg-2);
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.45s var(--ease), transform 0.45s var(--ease),
+                border-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+.reel-autocue:hover { border-color: var(--accent); color: var(--text); }
+.reel-autocue .sec { color: var(--accent); }
+
+.reel-autocue svg {
+    width: 20px;
+    height: 20px;
+    transform: rotate(-90deg);
+    overflow: visible;
+}
+
+.reel-autocue .track,
+.reel-autocue .ring { fill: none; stroke-width: 3; }
+.reel-autocue .track { stroke: var(--line-2); }
+
+.reel-autocue .ring {
+    stroke: var(--accent);
+    stroke-dasharray: 88;
+    stroke-dashoffset: 88;
+    stroke-linecap: round;
+}
+
+.reel-autocue.is-hidden {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   THEATRE — showreel + both walkthroughs in a single frame
+   ========================================================================== */
+.reel-theatre {
+    /* The navbar hides itself below 340px of scroll (see portfolio.js), and the
+       theatre sits well past that, so it doesn't need full nav clearance —
+       reclaiming it goes straight into the stage. */
+    --pad-top: 2.25rem;
+    --pad-bot: 1rem;
+
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: var(--pad-top) 0 var(--pad-bot);
+}
+
+/* the stage is the point of this page — let it run wider than the site's
+   standard 1440 wrap on large displays */
+.reel-theatre > .wrap { max-width: 1680px; }
+
+.theatre-inner {
+    /* The two walkthroughs are now LOCKED at --cell-h and no longer derived
+       from the stage width. The stage simply takes whatever vertical space is
+       left over, so it grows without touching them.
+       26svh matches the size they were when their height was still coupled. */
+    --cell-h: 26svh;
+    /* label text 26 + its 6.4 margin = 32.4; 44 keeps ~11px of real clearance
+       so sub-pixel rounding can never clip the bottom row */
+    --label-h: 44px;
+    --gap: clamp(0.6rem, 1.1vw, 1.05rem);
+
+    --stage-h: calc(
+        100svh - var(--pad-top) - var(--pad-bot) - var(--label-h) - var(--cell-h)
+    );
+
+    /* If the width caps first, .theatre-stage's aspect-ratio reduces its own
+       height to match — the composition just gets shorter, never clipped. */
+    width: min(100%, calc(var(--stage-h) * 16 / 9));
+    margin-inline: auto;
+}
+
+.reel-stage {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-inset);
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+
+.theatre-stage {
+    border-radius: var(--radius-lg);
+    box-shadow: 0 30px 80px -34px rgba(0, 0, 0, 0.92);
+}
+
+.reel-stage:hover,
+.reel-stage:focus-within { border-color: var(--line-3); }
+
+.reel-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;   /* the RFP capture is wider than 16:9 */
+    background: var(--bg-inset);
+}
+
+/* the two walkthroughs — fixed size, centred beneath the (now wider) stage */
+.theatre-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--gap);
+}
+
+.theatre-cell {
+    width: calc(var(--cell-h) * 16 / 9);
+    max-width: calc((100% - var(--gap)) / 2);   /* never wider than half the stage */
+    min-width: 0;
+}
+
+.theatre-cell-stage { width: 100%; }
+
+.cell-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    flex-wrap: nowrap;
+    margin-bottom: 0.4rem;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.cell-label .cell-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cell-num {
+    color: var(--accent);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    flex: none;
+}
+
+.cell-title {
+    color: var(--text);
+    font-size: clamp(0.76rem, 0.95vw, 0.9rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+}
+
+.cell-label:hover .cell-title { color: var(--accent); }
+
+.cell-meta {
+    color: var(--text-4);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    flex: none;
+}
+
+/* ---------- "tap for sound" ---------- */
+.reel-sound-btn {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.62rem 1rem;
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 8px 30px -8px var(--accent-glow);
+    animation: reel-nudge 2.6s var(--ease) infinite;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.reel-sound-btn.is-hidden {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+}
+
+@keyframes reel-nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+}
+
+/* ---------- glow when the showreel is nearly over ---------- */
+.theatre-cell.is-cued .reel-stage {
+    border-color: var(--accent);
+    animation: reel-glow 2.2s var(--ease) infinite;
+}
+
+.theatre-cell.is-cued .cell-title { color: var(--accent); }
+
+@keyframes reel-glow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(205, 242, 78, 0.30),
+                    0 0 24px -6px rgba(205, 242, 78, 0.28);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(205, 242, 78, 0),
+                    0 0 48px -4px rgba(205, 242, 78, 0.55);
+    }
+}
+
+/* ==========================================================================
+   WRITTEN DETAIL
+   ========================================================================== */
+.reel-demos .section-head h2 {
+    font-size: clamp(1.9rem, 5vw, 3.4rem);
+    margin-top: 1rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.6rem, 4vw, 3rem);
+}
+
+.detail-item { scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+
+.detail-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.reel-num {
+    color: var(--accent);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    flex: none;
+    padding-top: 0.3rem;
+}
+
+.detail-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+.detail-head .reel-metaline { margin-top: 0.7rem; }
+
+.reel-blurb {
+    margin-top: 1.1rem;
+    line-height: 1.65;
+    color: var(--text-2);
+    font-size: 0.95rem;
+}
+
+.reel-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 1rem;
+    list-style: none;
+    padding: 0;
+}
+
+.reel-tag {
+    padding: 0.38rem 0.78rem;
+    border: 1px solid var(--line-2);
+    border-radius: 100px;
+    background: var(--bg-2);
+    color: var(--text-2);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+}
+
+.reel-watch {
+    margin-top: 1.3rem;
+    padding: clamp(1.1rem, 2.2vw, 1.5rem);
+    background: var(--bg-1);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--radius);
+}
+
+.reel-watch ul {
+    margin: 0.9rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.7rem;
+}
+
+.reel-watch li {
+    position: relative;
+    padding-left: 1.4rem;
+    color: var(--text-2);
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.reel-watch li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 7px;
+    height: 1px;
+    background: var(--accent);
+}
+
+.detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+    color: var(--text-3);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.64rem;
+    transition: color 0.3s var(--ease);
+}
+
+.detail-back:hover { color: var(--accent); }
+
+/* ---------- cta ---------- */
+.reel-cta h2 {
+    font-size: clamp(1.9rem, 5.5vw, 3.6rem);
+    margin: 1.2rem 0 0;
+}
+
+.reel-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+/* ==========================================================================
+   RESPONSIVE — below the breakpoint the single-frame idea stops being useful,
+   so drop the height lock and the snapping and let it flow normally.
+   ========================================================================== */
+@media (max-width: 860px), (max-height: 620px) {
+    html { scroll-snap-type: none; }
+
+    .reel-hero,
+    .reel-theatre {
+        min-height: 0;
+        padding-top: calc(var(--nav-h) + 2rem);
+        padding-bottom: 2.5rem;
+    }
+
+    .theatre-inner { width: 100%; }   /* stage height calc no longer applies */
+
+    .theatre-row { grid-template-columns: 1fr; gap: 1.6rem; }
+    .theatre-bar { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .cell-title { font-size: 0.95rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; scroll-snap-type: none; }
+    .reel-dot,
+    .reel-sound-btn,
+    .theatre-cell.is-cued .reel-stage { animation: none; }
+    .reel-stage { transition: none; }
+    /* static ring so the cue still reads without the pulse */
+    .theatre-cell.is-cued .reel-stage { box-shadow: 0 0 0 2px var(--accent); }
+}

@@ -7,7 +7,8 @@ Self-contained: run `python portfolio_app.py` then open http://localhost:5000
 import os
 
 from flask import (
-    Flask, render_template, request, redirect, url_for, send_from_directory, abort
+    Flask, render_template, request, redirect, url_for, send_from_directory, abort,
+    Response
 )
 
 from projects_data import (
@@ -20,18 +21,83 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "hamza-portfolio-v3-secret")
 
+# ==================== WORK SHOWCASE (unlisted) ====================
+# Lives at /work-showcase. Nothing on the public site links here, the page sends
+# noindex, and robots.txt disallows it. Deliberately no passcode: anyone holding
+# the URL can open it and pass it on.
+# Change the path with the REEL_SLUG env var if you ever want a different one.
+REEL_SLUG = os.environ.get("REEL_SLUG", "work-showcase")
+
+# Canonical origin, used for the sitemap reference in robots.txt.
+SITE_ORIGIN = os.environ.get("SITE_ORIGIN", "https://hamza-portfolio-rk8n.onrender.com")
+
+REEL = {
+    "feature": {
+        "title": "AI Engineering Showreel",
+        "runtime": "1:32",
+        "src": "media/showreel-v3.mp4",
+        "poster": "media/poster-showreel.jpg",
+        "blurb": (
+            "A 90-second pass over the work: a live Gemini agent in production, an "
+            "18-agent procurement system, computer vision routing municipal work orders, "
+            "and the data-science layer underneath."
+        ),
+    },
+    "demos": [
+        {
+            "num": "01",
+            "title": "Multi-Agent Procurement / RFP System",
+            "short": "Multi-Agent RFP System",   # fits the narrow player label
+            "runtime": "3:20",
+            "src": "media/rfp-demo.mp4",
+            "poster": "media/poster-rfp.jpg",
+            "tags": ["Google ADK", "Gemini", "FastAPI", "Cloud Run", "PostgreSQL", "MCP"],
+            "blurb": (
+                "The full walkthrough of the hierarchical agent system — 18 specialist "
+                "agents across six teams, orchestrated by a director agent."
+            ),
+            "watch_for": [
+                "Live agent handoff — the ACTIVE AGENT panel switches from RFP Director to "
+                "RFP Creator, with the tool trace showing transfer_to_agent and read_local_templates",
+                "The integrations rail: Firecrawl, FMP, Drive, Slack, PDF generation, P(Win) scoring",
+                "Vendor scoring and the risk heatmap, ending in an award decision",
+                "The agent answering live inside Gemini Enterprise",
+            ],
+        },
+        {
+            "num": "02",
+            "title": "Baladiya — Civic Reporting with Vertex AI",
+            "short": "Baladiya — Vertex AI Vision",   # fits the narrow player label
+            "runtime": "2:59",
+            "src": "media/baladiya-demo.mp4",
+            "poster": "media/poster-baladiya.jpg",
+            "tags": ["YOLOv8", "Vertex AI", "Gemini Vision", "React", "FastAPI", "Cloud Run"],
+            "blurb": (
+                "A resident photographs a municipal problem; the system reads the image, "
+                "removes duplicates, and routes a work order to the right department."
+            ),
+            "watch_for": [
+                "Photo to structured report — category, severity, and street extracted from the image alone",
+                "The ticket routing itself to Roads & Infrastructure with an SLA date attached",
+                "Role-scoped admin dashboards per department",
+                "Geographic clustering across Doha, which is what suppresses duplicate reports",
+            ],
+        },
+    ],
+}
+
 # ==================== PERSONAL INFO (from CV) ====================
 PERSONAL_INFO = {
     "name": "Hamza Abu Saleh",
     "role": "AI Engineer",
-    "headline": "Data Science & AI student · Cloud AI Engineer @ LiverX · building production multi-agent systems on Google Cloud.",
+    "headline": "B.Sc. Data Science & AI graduate · Cloud AI Engineer @ LiverX · building production multi-agent systems on Google Cloud.",
     "location": "Amman, Jordan",
     "email": "hamzaabusaleh04@gmail.com",
     "phone": "+962 77 806 4473",
     "linkedin": "https://www.linkedin.com/in/hamza-abu-saleh-9572b7242/",
     "github": "#",
     "objective": (
-        "Data Science & AI student and Cloud AI Engineer apprentice specializing in production "
+        "Data Science & AI graduate and Cloud AI Engineer specializing in production "
         "multi-agent systems, computer vision, and GCP deployments — building real-world, "
         "high-impact intelligent systems through research-driven engineering."
     ),
@@ -46,8 +112,9 @@ PERSONAL_INFO = {
     "education": {
         "degree": "B.Sc. Data Science & Artificial Intelligence",
         "institution": "Hussein Technical University (HTU)",
-        "period": "2022 – 2026 (Expected)",
+        "period": "2022 – 2026",
         "gpa": "3.63 / 4.00",
+        "graduated": "Graduated Sept 2026",
         "note": "Excellence · Google Cloud Digital Leader — Certified",
     },
     "experience": [
@@ -114,29 +181,6 @@ PERSONAL_INFO = {
 }
 
 
-# ==================== SEO / SEARCH CONSOLE ====================
-@app.route("/googleee285dd89ce1ffed.html")
-def google_verification():
-    """Google Search Console verification file."""
-    return "google-site-verification: googleee285dd89ce1ffed.html"
-
-
-@app.route("/sitemap.xml")
-def sitemap():
-    """Sitemap for search engines."""
-    response = send_from_directory(BASE_DIR, "sitemap.xml")
-    response.headers["Content-Type"] = "application/xml"
-    return response
-
-
-@app.route("/robots.txt")
-def robots():
-    """Robots.txt for search engines."""
-    response = send_from_directory(BASE_DIR, "robots.txt")
-    response.headers["Content-Type"] = "text/plain"
-    return response
-
-
 # ==================== PORTFOLIO ROUTES ====================
 @app.route("/")
 def home():
@@ -179,6 +223,45 @@ def project_detail(project_id):
         project=project,
         next_project=next_project,
     )
+
+
+@app.route(f"/{REEL_SLUG}")
+def reel():
+    """Unlisted work showcase. Not linked anywhere on the public site."""
+    resp = Response(render_template(
+        "portfolio_reel.html",
+        personal=PERSONAL_INFO,
+        reel=REEL,
+    ))
+    # belt and braces alongside the in-page noindex meta
+    resp.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    resp.headers["Referrer-Policy"] = "no-referrer"
+    return resp
+
+
+@app.route("/robots.txt")
+def robots():
+    return Response(
+        "User-agent: *\n"
+        f"Disallow: /{REEL_SLUG}\n"
+        "Allow: /\n"
+        f"\nSitemap: {SITE_ORIGIN}/sitemap.xml\n",
+        mimetype="text/plain",
+    )
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    """Sitemap for search engines. The reel is deliberately absent."""
+    response = send_from_directory(BASE_DIR, "sitemap.xml")
+    response.headers["Content-Type"] = "application/xml"
+    return response
+
+
+@app.route("/googleee285dd89ce1ffed.html")
+def google_verification():
+    """Google Search Console verification. Live since March — do not rename."""
+    return "google-site-verification: googleee285dd89ce1ffed.html"
 
 
 @app.route("/cv")

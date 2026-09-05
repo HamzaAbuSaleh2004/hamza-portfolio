@@ -85,7 +85,7 @@
                 <span class="eyebrow">02 — About</span>
                 <h2>The person<br>behind the systems</h2>
             </div>
-            <p class="head-note">A Data Science &amp; AI student turning research-driven engineering into shipped, high-impact products.</p>
+            <p class="head-note">A Data Science &amp; AI graduate turning research-driven engineering into shipped, high-impact products.</p>
         </div>
 
         <div class="about-grid">
@@ -104,7 +104,13 @@
                     <div class="meta">
                         <span class="period">{{ personal.education.period }}</span>
                         <span class="gpa-chip">GPA {{ personal.education.gpa }}</span>
+                        {% if personal.education.graduated %}
+                        <span class="grad-chip">{{ personal.education.graduated }}</span>
+                        {% endif %}
                     </div>
+                    {% if personal.education.note %}
+                    <p class="edu-note">{{ personal.education.note }}</p>
+                    {% endif %}
                 </div>
             </div>
         </div>

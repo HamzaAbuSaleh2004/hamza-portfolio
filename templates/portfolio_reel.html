@@ -1,0 +1,177 @@
+{% extends "portfolio_base.html" %}
+
+{% block title %}Work Showcase — Hamza Abu Saleh{% endblock %}
+{% block meta_description %}Work showcase — Hamza Abu Saleh, AI Engineer.{% endblock %}
+
+{% block head_extra %}
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reel.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/reel.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- ==================== TITLE ==================== -->
+<section class="reel-hero" id="reel-top">
+    <div class="wrap">
+        <div class="reel-badge mono">
+            <span class="reel-dot"></span> Shared by link &middot; not indexed
+        </div>
+
+        <h1 class="reel-title display">
+            Work<br><span class="accent">Showcase</span>
+        </h1>
+
+        <p class="reel-lead">{{ reel.feature.blurb }}</p>
+
+        <div class="reel-herofoot">
+            <div class="reel-metaline mono">
+                <span>3 videos</span>
+                <span class="sep">/</span>
+                <span>{{ reel.feature.runtime }} showreel</span>
+                <span class="sep">/</span>
+                <span>2 full walkthroughs</span>
+            </div>
+
+            <!-- 5s countdown, then scroll to the theatre and play; any interaction cancels -->
+            <button class="reel-autocue mono" id="auto-cue" type="button"
+                    aria-label="Plays automatically in 5 seconds — click to start now">
+                <span>Plays in <span class="sec">5</span>s</span>
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                    <circle class="track" cx="16" cy="16" r="14"></circle>
+                    <circle class="ring" cx="16" cy="16" r="14"></circle>
+                </svg>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== THEATRE — all three videos in one frame ==================== -->
+<section class="reel-theatre" id="theatre">
+    <div class="wrap">
+        <div class="theatre-inner">
+
+            <!-- main stage -->
+            <figure class="reel-stage theatre-stage" id="feature-stage">
+                <video
+                    id="feature-video"
+                    class="reel-video"
+                    controls
+                    playsinline
+                    preload="auto"
+                    poster="{{ url_for('static', filename=reel.feature.poster) }}">
+                    <source src="{{ url_for('static', filename=reel.feature.src) }}" type="video/mp4">
+                    Your browser does not support embedded video.
+                    <a href="{{ url_for('static', filename=reel.feature.src) }}">Download the showreel</a>.
+                </video>
+
+                <!-- appears only if the browser forced muted autoplay -->
+                <button class="reel-sound-btn is-hidden mono" id="sound-btn" type="button">
+                    <i class="fas fa-volume-xmark"></i> Tap for sound
+                </button>
+            </figure>
+
+            <!-- the two full walkthroughs, same frame -->
+            <div class="theatre-row">
+                {% for d in reel.demos %}
+                <div class="theatre-cell" id="demo-{{ d.num }}" data-cue-target>
+                    <a class="cell-label" href="#detail-{{ d.num }}">
+                        <span class="cell-num mono">{{ d.num }}</span>
+                        <span class="cell-title">{{ d.short or d.title }}</span>
+                        <span class="cell-meta mono">{{ d.runtime }} &middot; Narrated</span>
+                    </a>
+                    <figure class="reel-stage theatre-cell-stage">
+                        <video
+                            class="reel-video"
+                            controls
+                            playsinline
+                            preload="none"
+                            poster="{{ url_for('static', filename=d.poster) }}">
+                            <source src="{{ url_for('static', filename=d.src) }}" type="video/mp4">
+                            Your browser does not support embedded video.
+                            <a href="{{ url_for('static', filename=d.src) }}">Download this demo</a>.
+                        </video>
+                    </figure>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ==================== WRITTEN DETAIL ==================== -->
+<section class="section section-hair reel-demos">
+    <div class="wrap">
+        <div class="section-head" data-reveal>
+            <div>
+                <span class="eyebrow">The full builds</span>
+                <h2 class="display">Nothing sped up,<br>nothing cut.</h2>
+            </div>
+            <p class="head-note">
+                The showreel moves fast by design. Both walkthroughs above are the
+                complete narrated runs — here's what each one is showing.
+            </p>
+        </div>
+
+        <div class="detail-grid">
+            {% for d in reel.demos %}
+            <article class="detail-item" id="detail-{{ d.num }}" data-reveal>
+                <header class="detail-head">
+                    <span class="reel-num mono">{{ d.num }}</span>
+                    <div>
+                        <h3 class="detail-title">{{ d.title }}</h3>
+                        <div class="reel-metaline mono">
+                            <span>{{ d.runtime }}</span>
+                            <span class="sep">/</span>
+                            <span>Narrated</span>
+                        </div>
+                    </div>
+                </header>
+
+                <p class="reel-blurb">{{ d.blurb }}</p>
+
+                <ul class="reel-tags">
+                    {% for t in d.tags %}<li class="reel-tag mono">{{ t }}</li>{% endfor %}
+                </ul>
+
+                <div class="reel-watch">
+                    <span class="eyebrow">What to watch for</span>
+                    <ul>
+                        {% for w in d.watch_for %}<li>{{ w }}</li>{% endfor %}
+                    </ul>
+                </div>
+
+                <a class="detail-back mono" href="#demo-{{ d.num }}">
+                    <i class="fas fa-circle-play"></i> Back to the player
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section class="section section-hair reel-cta">
+    <div class="wrap" data-reveal>
+        <span class="eyebrow">Next</span>
+        <h2 class="display">Happy to walk through<br>any of it live.</h2>
+        <div class="reel-cta-row">
+            <a href="mailto:{{ personal.email }}" class="btn btn-accent" data-magnetic>
+                {{ personal.email }} <span class="arrow">&#8599;</span>
+            </a>
+            <a href="{{ url_for('projects') }}" class="btn btn-solid" data-magnetic>
+                See the written case studies <span class="arrow">&#8599;</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
