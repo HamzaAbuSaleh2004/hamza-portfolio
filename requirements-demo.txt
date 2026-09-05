@@ -1,0 +1,10 @@
+# Compatibility shim.
+#
+# The Render service's build command is still `pip install -r requirements-demo.txt`,
+# a leftover from the old CV-screening demo (which portfolio v3.0 removed along with
+# its heavy ML dependencies). This file keeps that build command working by deferring
+# to the real dependency list.
+#
+# Once the Render build command is changed to `pip install -r requirements.txt`,
+# this file can be deleted.
+-r requirements.txt
