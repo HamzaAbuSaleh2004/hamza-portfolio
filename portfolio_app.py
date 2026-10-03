@@ -89,20 +89,21 @@ REEL = {
 # ==================== PERSONAL INFO (from CV) ====================
 PERSONAL_INFO = {
     "name": "Hamza Abu Saleh",
-    "role": "AI Engineer",
-    "headline": "B.Sc. Data Science & AI graduate · Cloud AI Engineer @ LiverX · building production multi-agent systems on Google Cloud.",
+    "role": "AI & Data Engineer",
+    "headline": "Google Cloud Professional Data Engineer · Cloud AI Engineer @ LiverX · building data pipelines and production multi-agent systems on Google Cloud.",
     "location": "Amman, Jordan",
     "email": "hamzaabusaleh04@gmail.com",
     "phone": "+962 77 806 4473",
     "linkedin": "https://www.linkedin.com/in/hamza-abu-saleh-9572b7242/",
     "github": "#",
     "objective": (
-        "Data Science & AI graduate and Cloud AI Engineer specializing in production "
-        "multi-agent systems, computer vision, and GCP deployments — building real-world, "
+        "Data Science & AI graduate, Google Cloud Professional Data Engineer and Cloud AI Engineer specializing in "
+        "data engineering and pipelines, production multi-agent systems, computer vision, and GCP deployments — building real-world, "
         "high-impact intelligent systems through research-driven engineering."
     ),
     "roles": [
         "AI Engineer",
+        "Data Engineer",
         "Cloud AI Engineer @ LiverX",
         "Multi-Agent Systems",
         "Computer Vision & NLP",
