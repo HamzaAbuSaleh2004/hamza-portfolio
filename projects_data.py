@@ -279,6 +279,7 @@ def get_category_counts():
 # four Google Cloud skill badges (rendered as Credly embeds).
 CERTIFICATIONS = [
     {"badge_id": "c818b3f9-1fc8-43eb-a36a-d945ce79814b", "label": "Google Cloud Digital Leader"},
+    {"badge_id": "38812a90-7c46-456d-b95b-7daef49b635c", "label": "Google Cloud Professional Data Engineer"},
     {"badge_id": "53076f1f-f9d3-4af8-9886-715240db39de", "label": "Google Cloud Skill Badge"},
     {"badge_id": "2b2109e5-929f-4f9f-90bd-71d272b28eb4", "label": "Google Cloud Skill Badge"},
     {"badge_id": "4c50aff6-1012-41a4-8e19-7ee36a03eed7", "label": "Google Cloud Skill Badge"},
